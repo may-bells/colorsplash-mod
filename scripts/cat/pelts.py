@@ -315,7 +315,7 @@ class Pelt:
         "WISTERIA",
         "ROSE MALLOW",
         "PICKLEWEED",
-        "GOLDEN CREEPING JENNY",
+        "NYMPHEACEAE CREEPING JENNY",
         "DESERT WILLOW",
         "CACTUS FLOWER",
         "PRAIRIE FIRE",
@@ -416,7 +416,7 @@ class Pelt:
         "CLOVER",
         "DAISY",
         "WISTERIA",
-        "GOLDEN CREEPING JENNY",
+        "NYMPHEACEAE CREEPING JENNY",
     ]
 
     head_accessories = [
@@ -502,26 +502,25 @@ class Pelt:
         'ZINGIBERACEAE', 'ALISMACEAE', 'POLYGONACEAE', 'NYCTAGINACEAE', 'BROMELIACEAE', 'SMILACEAE', 'EBENACEAE', 
         'ROSACEAE', 'LILIACEAE', 'JUNCACEAE', 'VERBENACEAE', 'HAEMODORACEAE', 'COMMELINACEAE', 'COLCHICACEAE'
     ]
-    ginger_colours = ['ANONACEAE', 'MYRTACEAE', 'TILIACEAE', 'PITTOSPORACEAE', 'MALVACEAE', 'SARRACENIACEAE', 'DROSERACEAE',
-                      'HIPPOCASTANACEAE', 'TROPAEOLACEAE', 'PASSIFLORACEAE', 'OLACACEAE', 'CRUCIACEAE', 'LOASACEAE', 'MALPIGHIACEAE',
-                      'MESEMBRYACEAE', 'VITACEAE', 'MARCGRAVIACEAE', 'CLUSIACEAE', 'BOMBACEAE', 'SAMYDACEAE', 'BIXACEAE',
-                      'GERANIACEAE', 'COMPOSITACEAE', 'RHAMNACEAE', 'OXALIDACEAE', 'ARALIACEAE', 'TEREBINTHACEAE', 'MELIACEAE',
-                      'SAXIFRAGACEAE', 'LINACEAE', 'CAPRIFOLIACEAE', 'CARYOPHYLLACEAE', 'LEGUMINOSAE', 'CAMELLIACEAE', 'CACTACEA']
-    black_colours = ['EUPHORBIACEAE', 'SCROPHULARIACEAE', 'CONVOLVULACEAE', 'MUSACEAE', 'UTRICULARIACEAE', 'UMBELLACEAE', 'PROTEACEAE',
-                     'GOODENIACEAE', 'THYMELACEAE', 'URTICACEAE', 'OROBANCHACEAE', 'HYDROPHYLLACEAE', 'AMARYLLIDACEAE', 'CONIFERACEAE',
+    monochrome_colours = ['BERBERIDACEAE', 'RANUNCULACEAE', 'CAPPARIDACEAE', 'VIOLACEAE', 'FUMARIACEAE', 'PAPAVERACEAE', 'MAGNOLIACEAE']
+    natural_colours = ['POLYGALACEAE', 'RESEDACEAE', 'CISTACEAE', 'NYMPHEACEAE', 'DIPTEROCARPACEAE', 'DILLENIACEAE', 'AMYGDALACEAE']
+    fall_colours = ['ANONACEAE', 'MYRTACEAE', 'TILIACEAE', 'PITTOSPORACEAE', 'MALVACEAE', 'SARRACENIACEAE', 'DROSERACEAE',
+                    'HIPPOCASTANACEAE', 'TROPAEOLACEAE', 'PASSIFLORACEAE', 'OLACACEAE', 'CRUCIACEAE', 'LOASACEAE', 'MALPIGHIACEAE',
+                    'MESEMBRYACEAE', 'VITACEAE', 'MARCGRAVIACEAE', 'CLUSIACEAE', 'BOMBACEAE', 'SAMYDACEAE', 'BIXACEAE',
+                    'GERANIACEAE', 'COMPOSITACEAE', 'RHAMNACEAE', 'OXALIDACEAE', 'ARALIACEAE', 'TEREBINTHACEAE', 'MELIACEAE']
+    summer_colours = ['SAXIFRAGACEAE', 'LINACEAE', 'CAPRIFOLIACEAE', 'CARYOPHYLLACEAE', 'LEGUMINOSAE', 'CAMELLIACEAE', 'CACTACEA',
+                      'JASMINEACEAE', 'LYTHRACEAE', 'ACANTHACEAE', 'CRASSULACEAE', 'RUBIACEAE', 'HYPERICACEAE', 'LORANTHACEAE',
+                      'AURANTIACEAE', 'RHIZOPHORACEAE', 'BORAGINACEAE', 'TAMARICACEAE', 'MELASTOMACEAE', 'LECYTHIDACEAE', 'VALERIANACEAE',
+                      'COMBRETACEAE', 'APOCYNACEAE', 'DIPSACEAE', 'STYLIDIACEAE', 'RUTACEAE', 'SOLANACEAE', 'PLUMBAGINACEAE']
+    winter_colours = ['LAMIACEAE', 'BEGONIACEAE', 'GROSSULARIACEAE', 'GENTIANACEAE', 'ERICACEAE', 'CAMPANULACEAE', 'POMACEAE',
+                      'BIGNONIACEAE', 'AMARANTACEAE', 'VACCINIACEAE', 'ONAGRACEAE', 'PRIMULACEAE', 'SAPOTACEAE', 'LOBELIACEAE',
+                      'MYRSINACEAE', 'PORTULACEAE', 'PLANTAGINACEAE', 'ELAEAGNACEAE', 'OLEACEAE', 'POLEMONIACEAE', 'ORCHIDACEAE',
+                      'EUPHORBIACEAE', 'SCROPHULARIACEAE', 'CONVOLVULACEAE', 'MUSACEAE', 'UTRICULARIACEAE', 'UMBELLACEAE', 'PROTEACEAE']
+    spring_colours = ['GOODENIACEAE', 'THYMELACEAE', 'URTICACEAE', 'OROBANCHACEAE', 'HYDROPHYLLACEAE', 'AMARYLLIDACEAE', 'CONIFERACEAE',
                      'PHYTOLACCACEAE', 'PAEONIACEAE', 'IRIDACEAE', 'DIOSCORACEAE', 'GESNERIACEAE', 'SANTALACEAE', 'HYDROCHARIDACEAE',
                      'ZINGIBERACEAE', 'ALISMACEAE', 'POLYGONACEAE', 'NYCTAGINACEAE', 'BROMELIACEAE', 'SMILACEAE', 'EBENACEAE',
                      'ROSACEAE', 'LILIACEAE', 'JUNCACEAE', 'VERBENACEAE', 'HAEMODORACEAE', 'COMMELINACEAE', 'COLCHICACEAE']
-    white_colours = ['BERBERIDACEAE', 'RANUNCULACEAE', 'CAPPARIDACEAE', 'VIOLACEAE', 'FUMARIACEAE', 'PAPAVERACEAE', 'MAGNOLIACEAE',
-                     'POLYGALACEAE', 'RESEDACEAE', 'CISTACEAE', 'NYMPHEACEAE', 'DIPTEROCARPACEAE', 'DILLENIACEAE', 'AMYGDALACEAE']
-    brown_colours = ['JASMINEACEAE', 'LYTHRACEAE', 'ACANTHACEAE', 'CRASSULACEAE', 'RUBIACEAE', 'HYPERICACEAE', 'LORANTHACEAE',
-                     'AURANTIACEAE', 'RHIZOPHORACEAE', 'BORAGINACEAE', 'TAMARICACEAE', 'MELASTOMACEAE', 'LECYTHIDACEAE', 'VALERIANACEAE',
-                     'COMBRETACEAE', 'APOCYNACEAE', 'DIPSACEAE', 'STYLIDIACEAE', 'RUTACEAE', 'SOLANACEAE', 'PLUMBAGINACEAE',
-                     'LAMIACEAE', 'BEGONIACEAE', 'GROSSULARIACEAE', 'GENTIANACEAE', 'ERICACEAE', 'CAMPANULACEAE', 'POMACEAE',
-                     'BIGNONIACEAE', 'AMARANTACEAE', 'VACCINIACEAE', 'ONAGRACEAE', 'PRIMULACEAE', 'SAPOTACEAE', 'LOBELIACEAE',
-                     'MYRSINACEAE', 'PORTULACEAE', 'PLANTAGINACEAE', 'ELAEAGNACEAE', 'OLEACEAE', 'POLEMONIACEAE', 'ORCHIDACEAE'
-                     ]
-    colour_categories = [ginger_colours, black_colours, white_colours, brown_colours]
+    colour_categories = [monochrome_colours, natural_colours, fall_colours, summer_colours, winter_colours, spring_colours]
     eye_sprites = [
         "YELLOW",
         "AMBER",
@@ -1076,28 +1075,32 @@ class Pelt:
         # ------------------------------------------------------------------------------------------------------------#
         #   PELT COLOUR
         # ------------------------------------------------------------------------------------------------------------#
-        # Weights for each colour group. It goes: (ginger_colours, black_colours, white_colours, brown_colours)
-        weights = [0, 0, 0, 0]
+        # Weights for each colour group.
+        weights = [0, 0, 0, 0, 0, 0]
         for p_ in par_peltcolours:
-            if p_ in Pelt.ginger_colours:
-                add_weight = (40, 0, 0, 10)
-            elif p_ in Pelt.black_colours:
-                add_weight = (0, 40, 2, 5)
-            elif p_ in Pelt.white_colours:
-                add_weight = (0, 5, 40, 0)
-            elif p_ in Pelt.brown_colours:
-                add_weight = (10, 5, 0, 35)
+            if p_ in Pelt.monochrome_colours:
+                add_weight = (1, 0, 0, 0, 0, 0)
+            elif p_ in Pelt.natural_colours:
+                add_weight = (0, 5, 0, 0, 0, 0)
+            elif p_ in Pelt.fall_colours:
+                add_weight = (0, 0, 50, 10, 10, 5)
+            elif p_ in Pelt.summer_colours:
+                add_weight = (0, 0, 10, 50, 5, 10)
+            elif p_ in Pelt.winter_colours:
+                add_weight = (0, 0, 10, 5, 50, 10)
+            elif p_ in Pelt.spring_colours:
+                add_weight = (0, 0, 5, 10, 10, 50)
             elif p_ is None:
-                add_weight = (40, 40, 40, 40)
+                add_weight = (10, 20, 30, 30, 30, 30)
             else:
-                add_weight = (0, 0, 0, 0)
+                add_weight = (0, 0, 0, 0, 0, 0)
 
             for x in range(0, len(weights)):
                 weights[x] += add_weight[x]
 
             # A quick check to make sure all the weights aren't 0
             if all([x == 0 for x in weights]):
-                weights = [1, 1, 1, 1]
+                weights = [1, 1, 1, 1, 1, 1]
 
         chosen_pelt_color = choice(
             random.choices(Pelt.colour_categories, weights=weights, k=1)[0]
@@ -1342,34 +1345,45 @@ class Pelt:
                             [self.tortiebase, "single"], weights=[97, 3], k=1
                         )[0]
 
-                    if self.colour == "WHITE":
-                        possible_colors = Pelt.white_colours.copy()
-                        possible_colors.remove("WHITE")
+                    if self.colour == "BERBERIDACEAE":
+                        possible_colors = Pelt.monochrome_colours.copy()
+                        possible_colors.remove("BERBERIDACEAE")
+                        self.colour = choice(possible_colors)
+                    elif self.colour == "MAGNOLIACEAE":
+                        possible_colors = Pelt.monochrome_colours.copy()
+                        possible_colors.remove("MAGNOLIACEAE")
                         self.colour = choice(possible_colors)
 
-                    # Ginger is often duplicated to increase its chances
-                    if (self.colour in Pelt.black_colours) or (
-                        self.colour in Pelt.white_colours
-                    ):
+                    # maybells mod : depending on the base pelt color, some colors have higher chances to show up as tortie
+                    if (self.colour in Pelt.monochrome_colours):    
                         self.tortiecolour = choice(
-                            (Pelt.ginger_colours * 2) + Pelt.brown_colours
+                            (Pelt.natural_colours * 2) + Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
                         )
-                    elif self.colour in Pelt.ginger_colours:
+                    elif (self.colour in Pelt.natural_colours):    
                         self.tortiecolour = choice(
-                            Pelt.brown_colours + Pelt.black_colours * 2
+                            Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
                         )
-                    elif self.colour in Pelt.brown_colours:
-                        possible_colors = Pelt.brown_colours.copy()
-                        possible_colors.remove(self.colour)
-                        possible_colors.extend(
-                            Pelt.black_colours + (Pelt.ginger_colours * 2)
+                    elif (self.colour in Pelt.fall_colours):    
+                        self.tortiecolour = choice(
+                            (Pelt.summer_colours * 2) + (Pelt.winter_colours * 2) + Pelt.spring_colours
                         )
-                        self.tortiecolour = choice(possible_colors)
+                    elif (self.colour in Pelt.summer_colours):    
+                        self.tortiecolour = choice(
+                            (Pelt.spring_colours * 2) + (Pelt.fall_colours * 2) + Pelt.winter_colours
+                        )
+                    elif (self.colour in Pelt.winter_colours):    
+                        self.tortiecolour = choice(
+                            (Pelt.fall_colours * 2) + (Pelt.spring_colours * 2) + Pelt.summer_colours
+                        )
+                    elif (self.colour in Pelt.spring_colours):    
+                        self.tortiecolour = choice(
+                            (Pelt.winter_colours * 2) + (Pelt.summer_colours * 2) + Pelt.fall_colours
+                        )
                     else:
-                        self.tortiecolour = "GOLDEN"
+                        self.tortiecolour = "NYMPHEACEAE"
 
             else:
-                self.tortiecolour = "GOLDEN"
+                self.tortiecolour = "NYMPHEACEAE"
         else:
             self.tortiebase = None
             self.tortiepattern = None
@@ -1709,9 +1723,9 @@ def _describe_torties(cat, color_name, short=False) -> [str, str]:
         # Just call them calico, tortie, or mottled
         if (
             cat.pelt.colour
-            in Pelt.black_colours + Pelt.brown_colours + Pelt.white_colours
+            in Pelt.monochrome_colours + Pelt.natural_colours + Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
             and cat.pelt.tortiecolour
-            in Pelt.black_colours + Pelt.brown_colours + Pelt.white_colours
+            in Pelt.monochrome_colours + Pelt.natural_colours + Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
         ):
             return "cat.pelts.mottled", ""
         else:
@@ -1724,9 +1738,9 @@ def _describe_torties(cat, color_name, short=False) -> [str, str]:
     color_name.append(patches_color)
 
     if (
-        cat.pelt.colour in Pelt.black_colours + Pelt.brown_colours + Pelt.white_colours
+        cat.pelt.colour in Pelt.monochrome_colours + Pelt.natural_colours + Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
         and cat.pelt.tortiecolour
-        in Pelt.black_colours + Pelt.brown_colours + Pelt.white_colours
+        in Pelt.monochrome_colours + Pelt.natural_colours + Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
     ):
         return "cat.pelts.mottled_long", color_name
     else:
