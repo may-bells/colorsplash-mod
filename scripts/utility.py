@@ -2895,24 +2895,7 @@ def generate_sprite(
                 sprites.sprites["white" + cat.pelt.vitiligo + cat_sprite], (0, 0)
             )
 
-        # draw eyes & scars1
-        eyes = sprites.sprites["eyes" + cat.pelt.eye_colour + cat_sprite].copy()
-        if cat.pelt.eye_colour2 != None:
-            eyes.blit(
-                sprites.sprites["eyes2" + cat.pelt.eye_colour2 + cat_sprite], (0, 0)
-            )
-        new_sprite.blit(eyes, (0, 0))
-
-        if not scars_hidden:
-            for scar in cat.pelt.scars:
-                if scar in cat.pelt.scars1:
-                    new_sprite.blit(
-                        sprites.sprites["scars" + scar + cat_sprite], (0, 0)
-                    )
-                if scar in cat.pelt.scars3:
-                    new_sprite.blit(
-                        sprites.sprites["scars" + scar + cat_sprite], (0, 0)
-                    )
+        # maybells mod : eyes and scar 1 were cut from here and pasted under line 2953
 
         # setting the lineart color to override on accessories & missing bits
         lineart_color = pygame.Color(
@@ -2951,6 +2934,7 @@ def generate_sprite(
             new_sprite.blit(sprites.sprites["lineartdf" + cat_sprite], (0, 0))
         elif dead:
             new_sprite.blit(sprites.sprites["lineartdead" + cat_sprite], (0, 0))
+
         # draw skin and scars2
         blendmode = pygame.BLEND_RGBA_MIN
         new_sprite.blit(sprites.sprites["skin" + cat.pelt.skin + cat_sprite], (0, 0))
@@ -2964,6 +2948,25 @@ def generate_sprite(
                         ),
                         (0, 0),
                         special_flags=blendmode,
+                    )
+
+        # draw eyes & scars1
+        eyes = sprites.sprites["eyes" + cat.pelt.eye_colour + cat_sprite].copy()
+        if cat.pelt.eye_colour2 != None:
+            eyes.blit(
+                sprites.sprites["eyes2" + cat.pelt.eye_colour2 + cat_sprite], (0, 0)
+            )
+        new_sprite.blit(eyes, (0, 0))
+
+        if not scars_hidden:
+            for scar in cat.pelt.scars:
+                if scar in cat.pelt.scars1:
+                    new_sprite.blit(
+                        sprites.sprites["scars" + scar + cat_sprite], (0, 0)
+                    )
+                if scar in cat.pelt.scars3:
+                    new_sprite.blit(
+                        sprites.sprites["scars" + scar + cat_sprite], (0, 0)
                     )
 
         # draw accessories
