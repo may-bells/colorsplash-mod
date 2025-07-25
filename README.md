@@ -1,24 +1,17 @@
-# clangen
-
-### [Discord Server](https://discord.gg/clangen) || [Official website](https://clangen.io) || [Itch.io Page](https://sablesteel.itch.io/clan-gen-fan-edit) 
+# Colorsplash mod of Clangen
+This is a standalone mod which replaces the original Clangen pelt/eye colors by 126 new colors. These colorful eyes also have variants for the base eyes which adds magical features to the cats (floral, wings, mermaid, kitsune) but also for heterochromia eyes (floral, halo, unicorn, horns).
 
 ## Description
 Fan-edit of the warrior cat clangen game built using Python and Pygame.
 
 ## Credits
-Original creator: just-some-cat.tumblr.com
+Colorsplash Mod : Maybells
 
+Original creator: just-some-cat.tumblr.com
 Fan-edit creator: SableSteel, and many others
 
-## Downloads
-### Stable
-Stable versions can be downloaded directly from the [official ClanGen website](https://clangen.io/download)
-
-### Development
-**Note**: Development versions are automatic snapshots of current development efforts. They are _not_ stable, can crash and even corrupt your save files.
-Additionally, we do not provide tech support for development versions.
-
-Download at your own risk here: [ClanGen development download](https://clangen.io/download-development)
+Here's links to the unmodded Official Clangen game.
+### [Discord Server](https://discord.gg/clangen) || [Official website](https://clangen.io) || [Itch.io Page](https://sablesteel.itch.io/clan-gen-fan-edit) 
 
 ## Running from source
 > [!WARNING]
@@ -70,9 +63,3 @@ Then, open the Command Palette (Ctrl+Shift+P) and search for `Python: Select Int
 
 Finally, open the `main.py` file and click the play button in the top right corner to run the game.
 
-
-## Bug Reporting
-We have migrated to GitHub Issues for bug reporting and tracking. We no longer review bug reports from the retired Google Form.
-
-## Contributing
-If you'd like to contribute to Clangen, please read our [Contributing guide](https://github.com/ClanGenOfficial/clangen/blob/development/CONTRIBUTING.md).

@@ -44,7 +44,7 @@
         "shaders": [
             "Enable Shaders",
             "This will add a shading layer onto the cat sprites.",
-            false
+            true
         ],
         "gore": [
             "Allow mild gore and blood in patrol artwork",
