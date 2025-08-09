@@ -461,7 +461,7 @@ class Pelt:
         "WISTERIA",
         "ROSE MALLOW",
         "PICKLEWEED",
-        "NYMPHEACEAE CREEPING JENNY",
+        "GOLDEN CREEPING JENNY",
         "DESERT WILLOW",
         "CACTUS FLOWER",
         "PRAIRIE FIRE",
@@ -562,7 +562,7 @@ class Pelt:
         "CLOVER",
         "DAISY",
         "WISTERIA",
-        "NYMPHEACEAE CREEPING JENNY",
+        "GOLDEN CREEPING JENNY",
     ]
 
     head_accessories = [

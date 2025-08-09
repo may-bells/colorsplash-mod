@@ -1,82 +1,132 @@
 {
     "en": {
-        "WHITE": {
-            "one": "pale",
-            "many": "pale"
-        },
         "FULLWHITE": "white",
-        "PALEGREY": {
-            "one": "gray",
-            "many": "pale gray"
-        },
-        "SILVER": {
-            "one": "silver",
-            "many": "silver"
-        },
-        "GREY": {
-            "one": "gray",
-            "many": "gray"
-        },
-        "DARKGREY": {
-            "one": "gray",
-            "many": "dark gray"
-        },
-        "GHOST": {
-            "one": "black",
-            "many": "black"
-        },
-        "BLACK": {
-            "one": "black",
-            "many": "black"
-        },
-        "CREAM": {
-            "one": "cream",
-            "many": "cream"
-        },
-        "PALEGINGER": {
-            "one": "ginger",
-            "many": "pale ginger"
-        },
-        "GOLDEN": {
-            "one": "golden",
-            "many": "golden"
-        },
-        "GINGER": {
-            "one": "ginger",
-            "many": "ginger"
-        },
-        "DARKGINGER": {
-            "one": "ginger",
-            "many": "dark ginger"
-        },
-        "SIENNA": {
-            "one": "ginger",
-            "many": "dark ginger"
-        },
-        "LIGHTBROWN": {
-            "one": "brown",
-            "many": "light brown"
-        },
-        "LILAC": {
-            "one": "brown",
-            "many": "light brown"
-        },
-        "BROWN": {
-            "one": "brown",
-            "many": "brown"
-        },
-        "GOLDEN-BROWN": {
-            "one": "brown",
-            "many": "golden brown"
-        },
-        "DARKBROWN": {
-            "one": "brown",
-            "many": "dark brown"
-        },
-        "CHOCOLATE": {
-            "one": "brown",
-            "many": "dark brown"
-        },
+        "BERBERIDACEAE": { "many": "berberidaceae", "one": "pale (berberidaceae)" },
+        "RANUNCULACEAE": { "many": "ranunculaceae", "one": "light grey (ranunculaceae)" },
+        "CAPPARIDACEAE": { "many": "capparidaceae", "one": "vibrant grey (capparidaceae)" },
+        "VIOLACEAE": { "many": "violaceae", "one": "grey (violaceae)" },
+        "FUMARIACEAE": { "many": "fumariaceae", "one": "deep grey (fumariaceae)" },
+        "PAPAVERACEAE": { "many": "papaveraceae", "one": "dark grey (papaveraceae)" },
+        "MAGNOLIACEAE": { "many": "magnoliaceae", "one": "obscure (magnoliaceae)" },
+        "POLYGALACEAE": { "many": "polygalaceae", "one": "pale brown (polygalaceae)" },
+        "RESEDACEAE": { "many": "resedaceae", "one": "light brown (resedaceae)" },
+        "CISTACEAE": { "many": "cistaceae", "one": "vibrant brown (cistaceae)" },
+        "NYMPHEACEAE": { "many": "nympheaceae", "one": "brown (nympheaceae)" },
+        "DIPTEROCARPACEAE": { "many": "dipterocarpaceae", "one": "deep brown (dipterocarpaceae)" },
+        "DILLENIACEAE": { "many": "dilleniaceae", "one": "dark brown (dilleniaceae)" },
+        "AMYGDALACEAE": { "many": "amygdalaceae", "one": "obscure brown (amygdalaceae)" },
+        "ANONACEAE": { "many": "anonaceae", "one": "pale red (anonaceae)" },
+        "MYRTACEAE": { "many": "myrtaceae", "one": "light red (myrtaceae)" },
+        "TILIACEAE": { "many": "tiliaceae", "one": "vibrant red (tiliaceae)" },
+        "PITTOSPORACEAE": { "many": "pittosporaceae", "one": "red (pittosporaceae)" },
+        "MALVACEAE": { "many": "malvaceae", "one": "deep red (malvaceae)" },
+        "SARRACENIACEAE": { "many": "sarraceniaceae", "one": "dark red (sarraceniaceae)" },
+        "DROSERACEAE": { "many": "droseraceae", "one": "obscure red (droseraceae)" },
+        "HIPPOCASTANACEAE": { "many": "hippocastanaceae", "one": "pale red (hippocastanaceae)" },
+        "TROPAEOLACEAE": { "many": "tropaeolaceae", "one": "light red (tropaeolaceae)" },
+        "PASSIFLORACEAE": { "many": "passifloraceae", "one": "vibrant red (passifloraceae)" },
+        "OLACACEAE": { "many": "olacaceae", "one": "red (olacaceae)" },
+        "CRUCIACEAE": { "many": "cruciaceae", "one": "deep red (cruciaceae)" },
+        "LOASACEAE": { "many": "loasaceae", "one": "dark red (loasaceae)" },
+        "MALPIGHIACEAE": { "many": "malpighiaceae", "one": "obscure red (malpighiaceae)" },
+        "MESEMBRYACEAE": { "many": "mesembryaceae", "one": "pale amber (mesembryaceae)" },
+        "VITACEAE": { "many": "vitaceae", "one": "light amber (vitaceae)" },
+        "MARCGRAVIACEAE": { "many": "marcgraviaceae", "one": "vibrant amber (marcgraviaceae)" },
+        "CLUSIACEAE": { "many": "clusiaceae", "one": "amber (clusiaceae)" },
+        "BOMBACEAE": { "many": "bombaceae", "one": "deep amber (bombaceae)" },
+        "SAMYDACEAE": { "many": "samydaceae", "one": "dark amber (samydaceae)" },
+        "BIXACEAE": { "many": "bixaceae", "one": "obscure amber (bixaceae)" },
+        "GERANIACEAE": { "many": "geraniaceae", "one": "pale amber (geraniaceae)" },
+        "COMPOSITACEAE": { "many": "compositaceae", "one": "light amber (compositaceae)" },
+        "RHAMNACEAE": { "many": "rhamnaceae", "one": "vibrant amber (rhamnaceae)" },
+        "OXALIDACEAE": { "many": "oxalidaceae", "one": "amber (oxalidaceae)" },
+        "ARALIACEAE": { "many": "araliaceae", "one": "deep amber (araliaceae)" },
+        "TEREBINTHACEAE": { "many": "terebinthaceae", "one": "dark amber (terebinthaceae)" },
+        "MELIACEAE": { "many": "meliaceae", "one": "obscure amber (meliaceae)" },
+        "SAXIFRAGACEAE": { "many": "saxifragaceae", "one": "pale lime (saxifragaceae)" },
+        "LINACEAE": { "many": "linaceae", "one": "light lime (linaceae)" },
+        "CAPRIFOLIACEAE": { "many": "caprifoliaceae", "one": "vibrant lime (caprifoliaceae)" },
+        "CARYOPHYLLACEAE": { "many": "caryophyllaceae", "one": "lime (caryophyllaceae)" },
+        "LEGUMINOSAE": { "many": "leguminosae", "one": "deep lime (leguminosae)" },
+        "CAMELLIACEAE": { "many": "camelliaceae", "one": "dark lime (camelliaceae)" },
+        "CACTACEA": { "many": "cactacea", "one": "obscure lime (cactacea)" },
+        "JASMINEACEAE": { "many": "jasmineaceae", "one": "pale lime (jasmineaceae)" },
+        "LYTHRACEAE": { "many": "lythraceae", "one": "light lime (lythraceae)" },
+        "ACANTHACEAE": { "many": "acanthaceae", "one": "vibrant lime (acanthaceae)" },
+        "CRASSULACEAE": { "many": "crassulaceae", "one": "lime (crassulaceae)" },
+        "RUBIACEAE": { "many": "rubiaceae", "one": "deep lime (rubiaceae)" },
+        "HYPERICACEAE": { "many": "hypericaceae", "one": "dark lime (hypericaceae)" },
+        "LORANTHACEAE": { "many": "loranthaceae", "one": "obscure lime (loranthaceae)" },
+        "AURANTIACEAE": { "many": "aurantiaceae", "one": "pale green (aurantiaceae)" },
+        "RHIZOPHORACEAE": { "many": "rhizophoraceae", "one": "light green (rhizophoraceae)" },
+        "BORAGINACEAE": { "many": "boraginaceae", "one": "vibrant green (boraginaceae)" },
+        "TAMARICACEAE": { "many": "tamaricaceae", "one": "green (tamaricaceae)" },
+        "MELASTOMACEAE": { "many": "melastomaceae", "one": "deep green (melastomaceae)" },
+        "LECYTHIDACEAE": { "many": "lecythidaceae", "one": "dark green (lecythidaceae)" },
+        "VALERIANACEAE": { "many": "valerianaceae", "one": "obscure green (valerianaceae)" },
+        "COMBRETACEAE": { "many": "combretaceae", "one": "pale green (combretaceae)" },
+        "APOCYNACEAE": { "many": "apocynaceae", "one": "light green (apocynaceae)" },
+        "DIPSACEAE": { "many": "dipsaceae", "one": "vibrant green (dipsaceae)" },
+        "STYLIDIACEAE": { "many": "stylidiaceae", "one": "green (stylidiaceae)" },
+        "RUTACEAE": { "many": "rutaceae", "one": "deep green (rutaceae)" },
+        "SOLANACEAE": { "many": "solanaceae", "one": "dark green (solanaceae)" },
+        "PLUMBAGINACEAE": { "many": "plumbaginaceae", "one": "obscure green (plumbaginaceae)" },
+        "LAMIACEAE": { "many": "lamiaceae", "one": "pale teal (lamiaceae)" },
+        "BEGONIACEAE": { "many": "begoniaceae", "one": "light teal (begoniaceae)" },
+        "GROSSULARIACEAE": { "many": "grossulariaceae", "one": "vibrant teal (grossulariaceae)" },
+        "GENTIANACEAE": { "many": "gentianaceae", "one": "teal (gentianaceae)" },
+        "ERICACEAE": { "many": "ericaceae", "one": "deep teal (ericaceae)" },
+        "CAMPANULACEAE": { "many": "campanulaceae", "one": "dark teal (campanulaceae)" },
+        "POMACEAE": { "many": "pomaceae", "one": "obscure teal (pomaceae)" },
+        "BIGNONIACEAE": { "many": "bignoniaceae", "one": "pale teal (bignoniaceae)" },
+        "AMARANTACEAE": { "many": "amarantaceae", "one": "light teal (amarantaceae)" },
+        "VACCINIACEAE": { "many": "vacciniaceae", "one": "vibrant teal (vacciniaceae)" },
+        "ONAGRACEAE": { "many": "onagraceae", "one": "teal (onagraceae)" },
+        "PRIMULACEAE": { "many": "primulaceae", "one": "deep teal (primulaceae)" },
+        "SAPOTACEAE": { "many": "sapotaceae", "one": "dark teal (sapotaceae)" },
+        "LOBELIACEAE": { "many": "lobeliaceae", "one": "obscure teal (lobeliaceae)" },
+        "MYRSINACEAE": { "many": "myrsinaceae", "one": "pale blue (myrsinaceae)" },
+        "PORTULACEAE": { "many": "portulaceae", "one": "light blue (portulaceae)" },
+        "PLANTAGINACEAE": { "many": "plantaginaceae", "one": "vibrant blue (plantaginaceae)" },
+        "ELAEAGNACEAE": { "many": "elaeagnaceae", "one": "blue (elaeagnaceae)" },
+        "OLEACEAE": { "many": "oleaceae", "one": "deep blue (oleaceae)" },
+        "POLEMONIACEAE": { "many": "polemoniaceae", "one": "dark blue (polemoniaceae)" },
+        "ORCHIDACEAE": { "many": "orchidaceae", "one": "obscure blue (orchidaceae)" },
+        "EUPHORBIACEAE": { "many": "euphorbiaceae", "one": "pale blue (euphorbiaceae)" },
+        "SCROPHULARIACEAE": { "many": "scrophulariaceae", "one": "light blue (scrophulariaceae)" },
+        "CONVOLVULACEAE": { "many": "convolvulaceae", "one": "vibrant blue (convolvulaceae)" },
+        "MUSACEAE": { "many": "musaceae", "one": "blue (musaceae)" },
+        "UTRICULARIACEAE": { "many": "utriculariaceae", "one": "deep blue (utriculariaceae)" },
+        "UMBELLACEAE": { "many": "umbellaceae", "one": "dark blue (umbellaceae)" },
+        "PROTEACEAE": { "many": "proteaceae", "one": "obscure blue (proteaceae)" },
+        "GOODENIACEAE": { "many": "goodeniaceae", "one": "pale purple (goodeniaceae)" },
+        "THYMELACEAE": { "many": "thymelaceae", "one": "light purple (thymelaceae)" },
+        "URTICACEAE": { "many": "urticaceae", "one": "vibrant purple (urticaceae)" },
+        "OROBANCHACEAE": { "many": "orobanchaceae", "one": "purple (orobanchaceae)" },
+        "HYDROPHYLLACEAE": { "many": "hydrophyllaceae", "one": "deep purple (hydrophyllaceae)" },
+        "AMARYLLIDACEAE": { "many": "amaryllidaceae", "one": "dark purple (amaryllidaceae)" },
+        "CONIFERACEAE": { "many": "coniferaceae", "one": "obscure purple (coniferaceae)" },
+        "PHYTOLACCACEAE": { "many": "phytolaccaceae", "one": "pale purple (hytolaccaceae)" },
+        "PAEONIACEAE": { "many": "paeoniaceae", "one": "light purple (paeoniaceae)" },
+        "IRIDACEAE": { "many": "iridaceae", "one": "vibrant purple (iridaceae)" },
+        "DIOSCORACEAE": { "many": "dioscoraceae", "one": "purple (dioscoraceae)" },
+        "GESNERIACEAE": { "many": "gesneriaceae", "one": "deep purple (gesneriaceae)" },
+        "SANTALACEAE": { "many": "santalaceae", "one": "dark purple (santalaceae)" },
+        "HYDROCHARIDACEAE": { "many": "hydrocharidaceae", "one": "obscure purple (hydrocharidaceae)" },
+        "ZINGIBERACEAE": { "many": "zingiberaceae", "one": "pale pink (zingiberaceae)" },
+        "ALISMACEAE": { "many": "alismaceae", "one": "light pink (alismaceae)" },
+        "POLYGONACEAE": { "many": "polygonaceae", "one": "vibrant pink (polygonaceae)" },
+        "NYCTAGINACEAE": { "many": "nyctaginaceae", "one": "pink (nyctaginaceae)" },
+        "BROMELIACEAE": { "many": "bromeliaceae", "one": "deep pink (bromeliaceae)" },
+        "SMILACEAE": { "many": "smilaceae", "one": "dark pink (smilaceae)" },
+        "EBENACEAE": { "many": "ebenaceae", "one": "obscure pink (ebenaceae)" },
+        "ROSACEAE": { "many": "rosaceae", "one": "pale pink (rosaceae)" },
+        "LILIACEAE": { "many": "liliaceae", "one": "light pink (liliaceae)" },
+        "JUNCACEAE": { "many": "juncaceae", "one": "vibrant pink (juncaceae)" },
+        "VERBENACEAE": { "many": "verbenaceae", "one": "pink (verbenaceae)" },
+        "HAEMODORACEAE": { "many": "haemodoraceae", "one": "deep pink (haemodoraceae)" },
+        "COMMELINACEAE": { "many": "commelinaceae", "one": "dark pink (commelinaceae)" },
+        "COLCHICACEAE": { "many": "colchicaceae", "one": "obscure pink (colchicaceae)" },
         "SingleColour": "single color",
         "SingleColour_long": "%{color}",
         "TwoColour": "two color",
