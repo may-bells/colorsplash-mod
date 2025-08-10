@@ -127,7 +127,7 @@ class ClanScreen(Screens):
         self.choose_cat_positions()
 
         self.set_disabled_menu_buttons(["camp_screen"])
-        self.update_heading_text(f"{game.clan.name}Clan")
+        self.update_heading_text(f"{game.clan.displayname}Clan")
         self.show_menu_buttons()
 
         # Creates and places the cat sprites.
@@ -274,8 +274,9 @@ class ClanScreen(Screens):
         )
 
         save_buttons = get_button_dict(ButtonStyles.SQUOVAL, (114, 30))
-        save_buttons["normal"] = image_cache.load_image(
-            "resources/images/buttons/save_clan.png"
+        save_buttons["normal"] = pygame.transform.scale(
+            image_cache.load_image("resources/images/buttons/save_clan.png"),
+            ui_scale_dimensions((114, 30)),
         )
         self.save_button = UISurfaceImageButton(
             ui_scale(pygame.Rect(((343, 643), (114, 30)))),
