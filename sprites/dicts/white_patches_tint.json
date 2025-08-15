@@ -129,7 +129,7 @@
     "COLCHICACEAE": "pink"
   },
   "possible_tints": {
-    "basic": ["none", "offwhite", "offwhite"],
+    "basic": ["offwhite", "offwhite"],
     "black": ["gray", "darkcream", "cream"],
     "gray": ["gray"],
     "red": ["pink", "red", "amber"],
