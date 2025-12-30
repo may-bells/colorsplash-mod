@@ -1597,15 +1597,15 @@ class Pelt:
                             Pelt.fall_colours + Pelt.summer_colours + Pelt.winter_colours + Pelt.spring_colours
                         )
                     elif (self.colour in Pelt.fall_colours):    
-                        self.tortiecolour = choice(
+                        self.tortie_colour = choice(
                             (Pelt.summer_colours * 2) + (Pelt.winter_colours * 2) + Pelt.spring_colours
                         )
                     elif (self.colour in Pelt.summer_colours):    
-                        self.tortiecolour = choice(
+                        self.tortie_colour = choice(
                             (Pelt.spring_colours * 2) + (Pelt.fall_colours * 2) + Pelt.winter_colours
                         )
                     elif (self.colour in Pelt.winter_colours):    
-                        self.tortiecolour = choice(
+                        self.tortie_colour = choice(
                             (Pelt.fall_colours * 2) + (Pelt.spring_colours * 2) + Pelt.summer_colours
                         )
                     elif (self.colour in Pelt.spring_colours):    
