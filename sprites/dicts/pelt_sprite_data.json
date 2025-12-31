@@ -1,0 +1,227 @@
+{
+    "spritesheet": {
+        "colours_single": ["SingleColour", "TwoColour"],
+        "colours_tabby": ["Tabby"],
+        "colours_marbled": ["Marbled"],
+        "colours_rosette": ["Rosette"],
+        "colours_smoke": ["Smoke"],
+        "colours_ticked": ["Ticked"],
+        "colours_speckled": ["Speckled"],
+        "colours_bengal": ["Bengal"],
+        "colours_mackerel": ["Mackerel"],
+        "colours_classic": ["Classic"],
+        "colours_sokoke": ["Sokoke"],
+        "colours_agouti": ["Agouti"],
+        "colours_singlestripe": ["Singlestripe"],
+        "colours_masked": ["Masked"]
+    },
+    "sprite_list": [
+        {
+            "BERBERIDACEAE": "monochrome",
+            "RANUNCULACEAE": "monochrome",
+            "CAPPARIDACEAE": "monochrome",
+            "VIOLACEAE": "monochrome",
+            "FUMARIACEAE": "monochrome",
+            "PAPAVERACEAE": "monochrome",
+            "MAGNOLIACEAE": "monochrome"
+        },
+        {
+            "POLYGALACEAE": "natural",
+            "RESEDACEAE": "natural",
+            "CISTACEAE": "natural",
+            "NYMPHEACEAE": "natural",
+            "DIPTEROCARPACEAE": "natural",
+            "DILLENIACEAE": "natural",
+            "AMYGDALACEAE": "natural"
+        },
+        {
+            "ANONACEAE": "fall",
+            "MYRTACEAE": "fall",
+            "TILIACEAE": "fall",
+            "PITTOSPORACEAE": "fall",
+            "MALVACEAE": "fall",
+            "SARRACENIACEAE": "fall",
+            "DROSERACEAE": "fall"
+        },
+        {
+            "HIPPOCASTANACEAE": "fall",
+            "TROPAEOLACEAE": "fall",
+            "PASSIFLORACEAE": "fall",
+            "OLACACEAE": "fall",
+            "CRUCIACEAE": "fall",
+            "LOASACEAE": "fall",
+            "MALPIGHIACEAE": "fall"
+        },
+        {
+            "MESEMBRYACEAE": "fall",
+            "VITACEAE": "fall",
+            "MARCGRAVIACEAE": "fall",
+            "CLUSIACEAE": "fall",
+            "BOMBACEAE": "fall",
+            "SAMYDACEAE": "fall",
+            "BIXACEAE": "fall"
+        },
+        {
+            "GERANIACEAE": "fall",
+            "COMPOSITACEAE": "fall",
+            "RHAMNACEAE": "fall",
+            "OXALIDACEAE": "fall",
+            "ARALIACEAE": "fall",
+            "TEREBINTHACEAE": "fall",
+            "MELIACEAE": "fall"
+        },
+        {
+            "SAXIFRAGACEAE": "summer",
+            "LINACEAE": "summer",
+            "CAPRIFOLIACEAE": "summer",
+            "CARYOPHYLLACEAE": "summer",
+            "LEGUMINOCEAE": "summer",
+            "CAMELLIACEAE": "summer",
+            "CACTACEAE": "summer"
+        },
+        {
+            "JASMINEACEAE": "summer",
+            "LYTHRACEAE": "summer",
+            "ACANTHACEAE": "summer",
+            "CRASSULACEAE": "summer",
+            "RUBIACEAE": "summer",
+            "HYPERICACEAE": "summer",
+            "LORANTHACEAE": "summer"
+        },
+        {
+            "AURANTIACEAE": "summer",
+            "RHIZOPHORACEAE": "summer",
+            "BORAGINACEAE": "summer",
+            "TAMARICACEAE": "summer",
+            "MELASTOMACEAE": "summer",
+            "LECYTHIDACEAE": "summer",
+            "VALERIANACEAE": "summer"
+        },
+        {
+            "COMBRETACEAE": "summer",
+            "APOCYNACEAE": "summer",
+            "DIPSACEAE": "summer",
+            "STYLIDIACEAE": "summer",
+            "RUTACEAE": "summer",
+            "SOLANACEAE": "summer",
+            "PLUMBAGINACEAE": "summer"
+        },
+        {
+            "LAMIACEAE": "winter",
+            "BEGONIACEAE": "winter",
+            "GROSSULARIACEAE": "winter",
+            "GENTIANACEAE": "winter",
+            "ERICACEAE": "winter",
+            "CAMPANULACEAE": "winter",
+            "POMACEAE": "winter"
+        },
+        {
+            "BIGNONIACEAE": "winter",
+            "AMARANTACEAE": "winter",
+            "VACCINIACEAE": "winter",
+            "ONAGRACEAE": "winter",
+            "PRIMULACEAE": "winter",
+            "SAPOTACEAE": "winter",
+            "LOBELIACEAE": "winter"
+        },
+        {
+            "MYRSINACEAE": "winter",
+            "PORTULACEAE": "winter",
+            "PLANTAGINACEAE": "winter",
+            "ELAEAGNACEAE": "winter",
+            "OLEACEAE": "winter",
+            "POLEMONIACEAE": "winter",
+            "ORCHIDACEAE": "winter"
+        },
+        {
+            "EUPHORBIACEAE": "winter",
+            "SCROPHULARIACEAE": "winter",
+            "CONVOLVULACEAE": "winter",
+            "MUSACEAE": "winter",
+            "UTRICULARIACEAE": "winter",
+            "UMBELLACEAE": "winter",
+            "PROTEACEAE": "winter"
+        },
+        {
+            "GOODENIACEAE": "spring",
+            "THYMELACEAE": "spring",
+            "URTICACEAE": "spring",
+            "OROBANCHACEAE": "spring",
+            "HYDROPHYLLACEAE": "spring",
+            "AMARYLLIDACEAE": "spring",
+            "CONIFERACEAE": "spring"
+        },
+        {
+            "PHYTOLACCACEAE": "spring",
+            "PAEONIACEAE": "spring",
+            "IRIDACEAE": "spring",
+            "DIOSCORACEAE": "spring",
+            "GESNERIACEAE": "spring",
+            "SANTALACEAE": "spring",
+            "HYDROCHARIDACEAE": "spring"
+        },
+        {
+            "ZINGIBERACEAE": "spring",
+            "ALISMACEAE": "spring",
+            "POLYGONACEAE": "spring",
+            "NYCTAGINACEAE": "spring",
+            "BROMELIACEAE": "spring",
+            "SMILACEAE": "spring",
+            "EBENACEAE": "spring"
+        },
+        {
+            "ROSACEAE": "spring",
+            "LILIACEAE": "spring",
+            "JUNCACEAE": "spring",
+            "VERBENACEAE": "spring",
+            "HAEMODORACEAE": "spring",
+            "COMMELINACEAE": "spring",
+            "COLCHICACEAE": "spring"
+        }
+    ],
+    "pattern_names": [
+        "single",
+        "tabby",
+        "bengal",
+        "marbled",
+        "ticked",
+        "smoke",
+        "rosette",
+        "speckled",
+        "mackerel",
+        "classic",
+        "sokoke",
+        "agouti",
+        "singlestripe",
+        "masked"
+    ],
+    "pattern_categories": {
+        "tabbies": [
+            "Tabby",
+            "Ticked",
+            "Mackerel",
+            "Classic",
+            "Sokoke",
+            "Agouti"
+        ],
+        "spotted": [
+            "Speckled",
+            "Rosette"
+        ],
+        "plain": [
+            "SingleColour",
+            "TwoColour",
+            "Smoke",
+            "Singlestripe"
+        ],
+        "exotic": [
+            "Bengal",
+            "Marbled",
+            "Masked"
+        ],
+        "torties": [
+            "Tortie",
+            "Calico"
+        ]
+    }
+}

@@ -18,6 +18,59 @@ class Sprites:
     white_patches_tints = {}
     clan_symbols = []
 
+    with open(
+        "sprites/dicts/pose_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        POSE_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/collar_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        COLLAR_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/wild_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        WILD_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/plant_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        PLANT_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/scar_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        SCAR_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/scar_missing_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        SCAR_MISSING_PART_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/skin_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        SKIN_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/tortie_patches_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        TORTIE_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/pelt_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        PELT_DATA = ujson.loads(read_file.read())
+
+    with open("sprites/dicts/eye_sprite_data.json", "r", encoding="utf-8") as read_file:
+        EYE_DATA = ujson.loads(read_file.read())
+
+    with open(
+        "sprites/dicts/white_patches_sprite_data.json", "r", encoding="utf-8"
+    ) as read_file:
+        WHITE_DATA = ujson.loads(read_file.read())
+
     def __init__(self):
         """Class that handles and hold all spritesheets.
         Size is normally automatically determined by the size
@@ -33,6 +86,8 @@ class Sprites:
         self.blank_sprite = None
 
         self.load_tints()
+
+        self.sheet_layout = self.POSE_DATA["sheet_layout"]
 
     def load_tints(self):
         try:
@@ -60,7 +115,14 @@ class Sprites:
         self.spritesheets[name] = pygame.image.load(a_file).convert_alpha()
 
     def make_group(
-        self, spritesheet, pos, name, sprites_x=3, sprites_y=7, no_index=False
+        self,
+        spritesheet,
+        pos,
+        name,
+        sprites_x=None,
+        sprites_y=None,
+        no_index=False,
+        palettes: list = None,
     ):  # pos = ex. (2, 3), no single pixels
         """
         Divide sprites on a spritesheet into groups of sprites that are easily accessible
@@ -68,9 +130,15 @@ class Sprites:
         :param pos: (x,y) tuple of offsets. NOT pixel offset, but offset of other sprites
         :param name: Name of group being made
         :param sprites_x: default 3, number of sprites horizontally
-        :param sprites_y: default 3, number of sprites vertically
-        :param no_index: default False, set True if sprite name does not require cat pose index
+        :param sprites_y: default 7, number of sprites vertically
+        :param no_index: default False, set True if sprite name does not require cat pose index:
+        :param palettes: list of palette names
         """
+        # pulls the defaults from the pose_sprite_data.json file
+        if not sprites_x:
+            sprites_x = self.sheet_layout[0]
+        if not sprites_y:
+            sprites_y = self.sheet_layout[1]
 
         group_x_ofs = pos[0] * sprites_x * self.size
         group_y_ofs = pos[1] * sprites_y * self.size
@@ -102,8 +170,55 @@ class Sprites:
                         )
                     new_sprite = self.blank_sprite
 
-                self.sprites[full_name] = new_sprite
+                if palettes:
+                    self.apply_palettes(i, name, new_sprite, palettes)
+                else:
+                    self.sprites[full_name] = new_sprite
                 i += 1
+
+    def apply_palettes(
+        self, sprite_index: int, name: str, new_sprite, palette_names: list
+    ):
+        """
+        Creates sprites for each color palette variation
+        :param sprite_index: index of sprite
+        :param name: name of sprite
+        :param new_sprite: the sprite object to create variations of
+        :param palette_names: list of palette names
+        """
+        # first we create an array of our palette map
+        full_map = pygame.image.load(f"sprites/palettes/{name}_palette.png")
+        map_array = pygame.PixelArray(full_map)
+        # then create a dictionary associating the palette name with its row of the array
+        color_palettes = {}
+        palette_names = palette_names.copy()
+        palette_names.insert(0, "BASE")
+        for row in range(
+            0, map_array.shape[1]  # pylint: disable=unsubscriptable-object
+        ):
+            color_name = palette_names[row]
+            color_palettes.update(
+                {color_name: [full_map.unmap_rgb(px) for px in map_array[::, row]]}
+            )
+
+        base_palette = color_palettes["BASE"]
+
+        # now we recolor the sprite
+        for color_name, palette in color_palettes.items():
+            if color_name == "BASE":
+                continue
+            recolor_sprite = pygame.PixelArray(new_sprite.copy())
+            # we replace each base_palette color with it's matching index from the color_palette
+            for color_i, color in enumerate(palette):
+                recolor_sprite.replace(base_palette[color_i], color)
+            # convert back into a surface
+            _sprite = recolor_sprite.make_surface()
+            # add it to our sprite dict!
+            self.sprites[f"{name}_{color_name}{sprite_index}"] = _sprite
+            # close the pixel array now that we're done
+            recolor_sprite.close()
+
+        map_array.close()
 
     def load_all(self):
         # get the width and height of the spritesheet
@@ -114,94 +229,67 @@ class Sprites:
         # if anyone changes lineart for whatever reason update this
         if isinstance(self.size, int):
             pass
-        elif width / 3 == height / 7:
-            self.size = width / 3
+        elif width / self.sheet_layout[0] == height / self.sheet_layout[1]:
+            self.size = width / self.sheet_layout[0]
         else:
             self.size = 50  # default, what base clangen uses
-            print(f"lineart.png is not 3x7, falling back to {self.size}")
             print(
-                f"if you are a modder, please update scripts/cat/sprites.py and "
-                f"do a search for 'if width / 3 == height / 7:'"
+                f"lineart.png is not {self.sheet_layout}, falling back to {self.size}"
+            )
+            print(
+                f"if you are a modder, please update sheet_layout in sprites/dicts/pose_sprite_data.json"
             )
 
         del width, height  # unneeded
 
-        for x in (
-            "lineart",
-            "lineartdf",
-            "lineartdead",
-            "lineartur",
-            "line_sc_overlay",
-            "line_ur_underlay",
-            "line_ur_overlay",
-            "gradient_ur",
-            "eyes",
-            "eyes2",
-            "floraleyes",
-            "floraleyes2",
-            "aerialeyes",
-            "aerialeyes2",
-            "aquaticeyes",
-            "aquaticeyes2",
-            "arideyes",
-            "arideyes2",
-            "skin",
-            "scars",
-            "missingscars",
-            "medcatherbs",
-            "wild",
-            "collars",
-            "bellcollars",
-            "bowcollars",
-            "nyloncollars",
-            "singlecolours",
-            "speckledcolours",
-            "tabbycolours",
-            "bengalcolours",
-            "marbledcolours",
-            "rosettecolours",
-            "smokecolours",
-            "tickedcolours",
-            "mackerelcolours",
-            "classiccolours",
-            "sokokecolours",
-            "agouticolours",
-            "singlestripecolours",
-            "maskedcolours",
-            "shadersnewwhite",
-            "lightingnew",
-            "whitepatches",
-            "tortiepatchesmasks",
+        data_jsons = (
+            self.EYE_DATA,
+            self.PELT_DATA,
+            self.WHITE_DATA,
+            self.TORTIE_DATA,
+            self.SKIN_DATA,
+            self.SCAR_DATA,
+            self.SCAR_MISSING_PART_DATA,
+            self.PLANT_DATA,
+            self.WILD_DATA,
+            self.COLLAR_DATA,
+        )
+
+        # data jsons that have multiple associated spritesheets
+        multi_sheet_data = [
+            x for x in data_jsons if isinstance(x["spritesheet"], (list, dict))
+        ]
+
+        # COMPILING SPRITESHEETS
+        spritesheets = [
             "fademask",
             "fadestarclan",
             "fadedarkforest",
             "fadeunknownresidence",
             "symbols",
-        ):
-            if (
-                "lineart" in x
-                and (
-                    constants.CONFIG["fun"]["april_fools"]
-                    or is_today(SpecialDate.APRIL_FOOLS)
-                )
-                and x != "lineartur"
+        ]
+
+        # separate from data_json list bc we need to handle it differently later
+        spritesheets.extend(self.POSE_DATA["spritesheet"])
+
+        for data in data_jsons:
+            if data in multi_sheet_data:
+                spritesheets.extend(data["spritesheet"])
+            else:
+                spritesheets.append(data["spritesheet"])
+
+        for x in spritesheets:
+            if "lineart" in x and (
+                constants.CONFIG["fun"]["april_fools"]
+                or is_today(SpecialDate.APRIL_FOOLS)
             ):
-                self.spritesheet(f"sprites/aprilfools{x}.png", x)
+                self.spritesheet(f"sprites/{x}_aprilfools.png", x)
             else:
                 self.spritesheet(f"sprites/{x}.png", x)
 
         # Line art
-        self.make_group("lineart", (0, 0), "lines")
-        self.make_group("shadersnewwhite", (0, 0), "shaders")
-        self.make_group("lightingnew", (0, 0), "lighting")
-
-        self.make_group("lineartdead", (0, 0), "lineartdead")
-        self.make_group("lineartdf", (0, 0), "lineartdf")
-        self.make_group("lineartur", (0, 0), "lineartur")
-        self.make_group("line_sc_overlay", (0, 0), "sc_overlay")
-        self.make_group("line_ur_underlay", (0, 0), "ur_underlay")
-        self.make_group("line_ur_overlay", (0, 0), "ur_overlay")
-        self.make_group("gradient_ur", (0, 0), "gradient_ur")
+        for sheet in self.POSE_DATA["spritesheet"]:
+            self.make_group(sheet, (0, 0), sheet)
 
         # Fading Fog
         for i in range(0, 3):
@@ -210,635 +298,44 @@ class Sprites:
             self.make_group("fadedarkforest", (i, 0), f"fadedf{i}")
             self.make_group("fadeunknownresidence", (i, 0), f"fadeur{i}")
 
-        # Define eye colors
-        eye_colors = [
-            ['BERBERIDACEAE', 'RANUNCULACEAE', 'CAPPARIDACEAE', 'VIOLACEAE', 'FUMARIACEAE', 'PAPAVERACEAE', 'MAGNOLIACEAE'],
-            ['POLYGALACEAE', 'RESEDACEAE', 'CISTACEAE', 'NYMPHEACEAE', 'DIPTEROCARPACEAE', 'DILLENIACEAE', 'AMYGDALACEAE'],
-            ['ANONACEAE', 'MYRTACEAE', 'TILIACEAE', 'PITTOSPORACEAE', 'MALVACEAE', 'SARRACENIACEAE', 'DROSERACEAE'],
-            ['HIPPOCASTANACEAE', 'TROPAEOLACEAE', 'PASSIFLORACEAE', 'OLACACEAE', 'CRUCIACEAE', 'LOASACEAE', 'MALPIGHIACEAE'],
-            ['MESEMBRYACEAE', 'VITACEAE', 'MARCGRAVIACEAE', 'CLUSIACEAE', 'BOMBACEAE', 'SAMYDACEAE', 'BIXACEAE'],
-            ['GERANIACEAE', 'COMPOSITACEAE', 'RHAMNACEAE', 'OXALIDACEAE', 'ARALIACEAE', 'TEREBINTHACEAE', 'MELIACEAE'],
-            ['SAXIFRAGACEAE', 'LINACEAE', 'CAPRIFOLIACEAE', 'CARYOPHYLLACEAE', 'LEGUMINOSAE', 'CAMELLIACEAE', 'CACTACEA'],
-            ['JASMINEACEAE', 'LYTHRACEAE', 'ACANTHACEAE', 'CRASSULACEAE', 'RUBIACEAE', 'HYPERICACEAE', 'LORANTHACEAE'],
-            ['AURANTIACEAE', 'RHIZOPHORACEAE', 'BORAGINACEAE', 'TAMARICACEAE', 'MELASTOMACEAE', 'LECYTHIDACEAE', 'VALERIANACEAE'],
-            ['COMBRETACEAE', 'APOCYNACEAE', 'DIPSACEAE', 'STYLIDIACEAE', 'RUTACEAE', 'SOLANACEAE', 'PLUMBAGINACEAE'],
-            ['LAMIACEAE', 'BEGONIACEAE', 'GROSSULARIACEAE', 'GENTIANACEAE', 'ERICACEAE', 'CAMPANULACEAE', 'POMACEAE'],
-            ['BIGNONIACEAE', 'AMARANTACEAE', 'VACCINIACEAE', 'ONAGRACEAE', 'PRIMULACEAE', 'SAPOTACEAE', 'LOBELIACEAE'],
-            ['MYRSINACEAE', 'PORTULACEAE', 'PLANTAGINACEAE', 'ELAEAGNACEAE', 'OLEACEAE', 'POLEMONIACEAE', 'ORCHIDACEAE'],
-            ['EUPHORBIACEAE', 'SCROPHULARIACEAE', 'CONVOLVULACEAE', 'MUSACEAE', 'UTRICULARIACEAE', 'UMBELLACEAE', 'PROTEACEAE'],
-            ['GOODENIACEAE', 'THYMELACEAE', 'URTICACEAE', 'OROBANCHACEAE', 'HYDROPHYLLACEAE', 'AMARYLLIDACEAE', 'CONIFERACEAE'],
-            ['PHYTOLACCACEAE', 'PAEONIACEAE', 'IRIDACEAE', 'DIOSCORACEAE', 'GESNERIACEAE', 'SANTALACEAE', 'HYDROCHARIDACEAE'],
-            ['ZINGIBERACEAE', 'ALISMACEAE', 'POLYGONACEAE', 'NYCTAGINACEAE', 'BROMELIACEAE', 'SMILACEAE', 'EBENACEAE'],
-            ['ROSACEAE', 'LILIACEAE', 'JUNCACEAE', 'VERBENACEAE', 'HAEMODORACEAE', 'COMMELINACEAE', 'COLCHICACEAE'],
-        ]
+        for data in data_jsons:
+            # collar accs
+            # this guy is special since it uses palette mapping
+            if data == self.COLLAR_DATA and self.COLLAR_DATA["palette_map"]:
+                spritesheet = self.COLLAR_DATA["spritesheet"]
+                for row, style_type in enumerate(self.COLLAR_DATA["style_data"]):
+                    for col, style in enumerate(style_type):
+                        self.make_group(
+                            spritesheet=spritesheet,
+                            pos=(col, row),
+                            name=f"{spritesheet}{style}",
+                            palettes=style_type[style],
+                        )
 
-        for row, colors in enumerate(eye_colors):
-            for col, color in enumerate(colors):
-                self.make_group("eyes", (col, row), f"eyes{color}")
-                self.make_group("eyes2", (col, row), f"eyes2{color}")
-        
-        eye_colors = [
-            ['BERBERIDACEAE-FLORAL', 'RANUNCULACEAE-FLORAL', 'CAPPARIDACEAE-FLORAL', 'VIOLACEAE-FLORAL', 'FUMARIACEAE-FLORAL', 'PAPAVERACEAE-FLORAL', 'MAGNOLIACEAE-FLORAL'],
-            ['POLYGALACEAE-FLORAL', 'RESEDACEAE-FLORAL', 'CISTACEAE-FLORAL', 'NYMPHEACEAE-FLORAL', 'DIPTEROCARPACEAE-FLORAL', 'DILLENIACEAE-FLORAL', 'AMYGDALACEAE-FLORAL'],
-            ['ANONACEAE-FLORAL', 'MYRTACEAE-FLORAL', 'TILIACEAE-FLORAL', 'PITTOSPORACEAE-FLORAL', 'MALVACEAE-FLORAL', 'SARRACENIACEAE-FLORAL', 'DROSERACEAE-FLORAL'],
-            ['HIPPOCASTANACEAE-FLORAL', 'TROPAEOLACEAE-FLORAL', 'PASSIFLORACEAE-FLORAL', 'OLACACEAE-FLORAL', 'CRUCIACEAE-FLORAL', 'LOASACEAE-FLORAL', 'MALPIGHIACEAE-FLORAL'],
-            ['MESEMBRYACEAE-FLORAL', 'VITACEAE-FLORAL', 'MARCGRAVIACEAE-FLORAL', 'CLUSIACEAE-FLORAL', 'BOMBACEAE-FLORAL', 'SAMYDACEAE-FLORAL', 'BIXACEAE-FLORAL'],
-            ['GERANIACEAE-FLORAL', 'COMPOSITACEAE-FLORAL', 'RHAMNACEAE-FLORAL', 'OXALIDACEAE-FLORAL', 'ARALIACEAE-FLORAL', 'TEREBINTHACEAE-FLORAL', 'MELIACEAE-FLORAL'],
-            ['SAXIFRAGACEAE-FLORAL', 'LINACEAE-FLORAL', 'CAPRIFOLIACEAE-FLORAL', 'CARYOPHYLLACEAE-FLORAL', 'LEGUMINOSAE-FLORAL', 'CAMELLIACEAE-FLORAL', 'CACTACEA-FLORAL'],
-            ['JASMINEACEAE-FLORAL', 'LYTHRACEAE-FLORAL', 'ACANTHACEAE-FLORAL', 'CRASSULACEAE-FLORAL', 'RUBIACEAE-FLORAL', 'HYPERICACEAE-FLORAL', 'LORANTHACEAE-FLORAL'],
-            ['AURANTIACEAE-FLORAL', 'RHIZOPHORACEAE-FLORAL', 'BORAGINACEAE-FLORAL', 'TAMARICACEAE-FLORAL', 'MELASTOMACEAE-FLORAL', 'LECYTHIDACEAE-FLORAL', 'VALERIANACEAE-FLORAL'],
-            ['COMBRETACEAE-FLORAL', 'APOCYNACEAE-FLORAL', 'DIPSACEAE-FLORAL', 'STYLIDIACEAE-FLORAL', 'RUTACEAE-FLORAL', 'SOLANACEAE-FLORAL', 'PLUMBAGINACEAE-FLORAL'],
-            ['LAMIACEAE-FLORAL', 'BEGONIACEAE-FLORAL', 'GROSSULARIACEAE-FLORAL', 'GENTIANACEAE-FLORAL', 'ERICACEAE-FLORAL', 'CAMPANULACEAE-FLORAL', 'POMACEAE-FLORAL'],
-            ['BIGNONIACEAE-FLORAL', 'AMARANTACEAE-FLORAL', 'VACCINIACEAE-FLORAL', 'ONAGRACEAE-FLORAL', 'PRIMULACEAE-FLORAL', 'SAPOTACEAE-FLORAL', 'LOBELIACEAE-FLORAL'],
-            ['MYRSINACEAE-FLORAL', 'PORTULACEAE-FLORAL', 'PLANTAGINACEAE-FLORAL', 'ELAEAGNACEAE-FLORAL', 'OLEACEAE-FLORAL', 'POLEMONIACEAE-FLORAL', 'ORCHIDACEAE-FLORAL'],
-            ['EUPHORBIACEAE-FLORAL', 'SCROPHULARIACEAE-FLORAL', 'CONVOLVULACEAE-FLORAL', 'MUSACEAE-FLORAL', 'UTRICULARIACEAE-FLORAL', 'UMBELLACEAE-FLORAL', 'PROTEACEAE-FLORAL'],
-            ['GOODENIACEAE-FLORAL', 'THYMELACEAE-FLORAL', 'URTICACEAE-FLORAL', 'OROBANCHACEAE-FLORAL', 'HYDROPHYLLACEAE-FLORAL', 'AMARYLLIDACEAE-FLORAL', 'CONIFERACEAE-FLORAL'],
-            ['PHYTOLACCACEAE-FLORAL', 'PAEONIACEAE-FLORAL', 'IRIDACEAE-FLORAL', 'DIOSCORACEAE-FLORAL', 'GESNERIACEAE-FLORAL', 'SANTALACEAE-FLORAL', 'HYDROCHARIDACEAE-FLORAL'],
-            ['ZINGIBERACEAE-FLORAL', 'ALISMACEAE-FLORAL', 'POLYGONACEAE-FLORAL', 'NYCTAGINACEAE-FLORAL', 'BROMELIACEAE-FLORAL', 'SMILACEAE-FLORAL', 'EBENACEAE-FLORAL'],
-            ['ROSACEAE-FLORAL', 'LILIACEAE-FLORAL', 'JUNCACEAE-FLORAL', 'VERBENACEAE-FLORAL', 'HAEMODORACEAE-FLORAL', 'COMMELINACEAE-FLORAL', 'COLCHICACEAE-FLORAL'],
-        ]
+            # these have multiple sprite sheets, so are handled differently from the others
+            elif data in multi_sheet_data:
+                for spritesheet in data["spritesheet"]:
+                    self.load_sheet(spritesheet, data["sprite_list"])
 
-        for row, colors in enumerate(eye_colors):
-            for col, color in enumerate(colors):
-                self.make_group("floraleyes", (col, row), f"eyes{color}")
-                self.make_group("floraleyes2", (col, row), f"eyes2{color}")
-        
-        eye_colors = [
-            ['BERBERIDACEAE-AERIAL', 'RANUNCULACEAE-AERIAL', 'CAPPARIDACEAE-AERIAL', 'VIOLACEAE-AERIAL', 'FUMARIACEAE-AERIAL', 'PAPAVERACEAE-AERIAL', 'MAGNOLIACEAE-AERIAL'],
-            ['POLYGALACEAE-AERIAL', 'RESEDACEAE-AERIAL', 'CISTACEAE-AERIAL', 'NYMPHEACEAE-AERIAL', 'DIPTEROCARPACEAE-AERIAL', 'DILLENIACEAE-AERIAL', 'AMYGDALACEAE-AERIAL'],
-            ['ANONACEAE-AERIAL', 'MYRTACEAE-AERIAL', 'TILIACEAE-AERIAL', 'PITTOSPORACEAE-AERIAL', 'MALVACEAE-AERIAL', 'SARRACENIACEAE-AERIAL', 'DROSERACEAE-AERIAL'],
-            ['HIPPOCASTANACEAE-AERIAL', 'TROPAEOLACEAE-AERIAL', 'PASSIFLORACEAE-AERIAL', 'OLACACEAE-AERIAL', 'CRUCIACEAE-AERIAL', 'LOASACEAE-AERIAL', 'MALPIGHIACEAE-AERIAL'],
-            ['MESEMBRYACEAE-AERIAL', 'VITACEAE-AERIAL', 'MARCGRAVIACEAE-AERIAL', 'CLUSIACEAE-AERIAL', 'BOMBACEAE-AERIAL', 'SAMYDACEAE-AERIAL', 'BIXACEAE-AERIAL'],
-            ['GERANIACEAE-AERIAL', 'COMPOSITACEAE-AERIAL', 'RHAMNACEAE-AERIAL', 'OXALIDACEAE-AERIAL', 'ARALIACEAE-AERIAL', 'TEREBINTHACEAE-AERIAL', 'MELIACEAE-AERIAL'],
-            ['SAXIFRAGACEAE-AERIAL', 'LINACEAE-AERIAL', 'CAPRIFOLIACEAE-AERIAL', 'CARYOPHYLLACEAE-AERIAL', 'LEGUMINOSAE-AERIAL', 'CAMELLIACEAE-AERIAL', 'CACTACEA-AERIAL'],
-            ['JASMINEACEAE-AERIAL', 'LYTHRACEAE-AERIAL', 'ACANTHACEAE-AERIAL', 'CRASSULACEAE-AERIAL', 'RUBIACEAE-AERIAL', 'HYPERICACEAE-AERIAL', 'LORANTHACEAE-AERIAL'],
-            ['AURANTIACEAE-AERIAL', 'RHIZOPHORACEAE-AERIAL', 'BORAGINACEAE-AERIAL', 'TAMARICACEAE-AERIAL', 'MELASTOMACEAE-AERIAL', 'LECYTHIDACEAE-AERIAL', 'VALERIANACEAE-AERIAL'],
-            ['COMBRETACEAE-AERIAL', 'APOCYNACEAE-AERIAL', 'DIPSACEAE-AERIAL', 'STYLIDIACEAE-AERIAL', 'RUTACEAE-AERIAL', 'SOLANACEAE-AERIAL', 'PLUMBAGINACEAE-AERIAL'],
-            ['LAMIACEAE-AERIAL', 'BEGONIACEAE-AERIAL', 'GROSSULARIACEAE-AERIAL', 'GENTIANACEAE-AERIAL', 'ERICACEAE-AERIAL', 'CAMPANULACEAE-AERIAL', 'POMACEAE-AERIAL'],
-            ['BIGNONIACEAE-AERIAL', 'AMARANTACEAE-AERIAL', 'VACCINIACEAE-AERIAL', 'ONAGRACEAE-AERIAL', 'PRIMULACEAE-AERIAL', 'SAPOTACEAE-AERIAL', 'LOBELIACEAE-AERIAL'],
-            ['MYRSINACEAE-AERIAL', 'PORTULACEAE-AERIAL', 'PLANTAGINACEAE-AERIAL', 'ELAEAGNACEAE-AERIAL', 'OLEACEAE-AERIAL', 'POLEMONIACEAE-AERIAL', 'ORCHIDACEAE-AERIAL'],
-            ['EUPHORBIACEAE-AERIAL', 'SCROPHULARIACEAE-AERIAL', 'CONVOLVULACEAE-AERIAL', 'MUSACEAE-AERIAL', 'UTRICULARIACEAE-AERIAL', 'UMBELLACEAE-AERIAL', 'PROTEACEAE-AERIAL'],
-            ['GOODENIACEAE-AERIAL', 'THYMELACEAE-AERIAL', 'URTICACEAE-AERIAL', 'OROBANCHACEAE-AERIAL', 'HYDROPHYLLACEAE-AERIAL', 'AMARYLLIDACEAE-AERIAL', 'CONIFERACEAE-AERIAL'],
-            ['PHYTOLACCACEAE-AERIAL', 'PAEONIACEAE-AERIAL', 'IRIDACEAE-AERIAL', 'DIOSCORACEAE-AERIAL', 'GESNERIACEAE-AERIAL', 'SANTALACEAE-AERIAL', 'HYDROCHARIDACEAE-AERIAL'],
-            ['ZINGIBERACEAE-AERIAL', 'ALISMACEAE-AERIAL', 'POLYGONACEAE-AERIAL', 'NYCTAGINACEAE-AERIAL', 'BROMELIACEAE-AERIAL', 'SMILACEAE-AERIAL', 'EBENACEAE-AERIAL'],
-            ['ROSACEAE-AERIAL', 'LILIACEAE-AERIAL', 'JUNCACEAE-AERIAL', 'VERBENACEAE-AERIAL', 'HAEMODORACEAE-AERIAL', 'COMMELINACEAE-AERIAL', 'COLCHICACEAE-AERIAL']
-        ]
+            # everything else
+            else:
+                self.load_sheet(data["spritesheet"], data["sprite_list"])
 
-        for row, colors in enumerate(eye_colors):
-            for col, color in enumerate(colors):
-                self.make_group("aerialeyes", (col, row), f"eyes{color}")
-                self.make_group("aerialeyes2", (col, row), f"eyes2{color}")
-        
-        eye_colors = [
-            ['BERBERIDACEAE-AQUATIC', 'RANUNCULACEAE-AQUATIC', 'CAPPARIDACEAE-AQUATIC', 'VIOLACEAE-AQUATIC', 'FUMARIACEAE-AQUATIC', 'PAPAVERACEAE-AQUATIC', 'MAGNOLIACEAE-AQUATIC'],
-            ['POLYGALACEAE-AQUATIC', 'RESEDACEAE-AQUATIC', 'CISTACEAE-AQUATIC', 'NYMPHEACEAE-AQUATIC', 'DIPTEROCARPACEAE-AQUATIC', 'DILLENIACEAE-AQUATIC', 'AMYGDALACEAE-AQUATIC'],
-            ['ANONACEAE-AQUATIC', 'MYRTACEAE-AQUATIC', 'TILIACEAE-AQUATIC', 'PITTOSPORACEAE-AQUATIC', 'MALVACEAE-AQUATIC', 'SARRACENIACEAE-AQUATIC', 'DROSERACEAE-AQUATIC'],
-            ['HIPPOCASTANACEAE-AQUATIC', 'TROPAEOLACEAE-AQUATIC', 'PASSIFLORACEAE-AQUATIC', 'OLACACEAE-AQUATIC', 'CRUCIACEAE-AQUATIC', 'LOASACEAE-AQUATIC', 'MALPIGHIACEAE-AQUATIC'],
-            ['MESEMBRYACEAE-AQUATIC', 'VITACEAE-AQUATIC', 'MARCGRAVIACEAE-AQUATIC', 'CLUSIACEAE-AQUATIC', 'BOMBACEAE-AQUATIC', 'SAMYDACEAE-AQUATIC', 'BIXACEAE-AQUATIC'],
-            ['GERANIACEAE-AQUATIC', 'COMPOSITACEAE-AQUATIC', 'RHAMNACEAE-AQUATIC', 'OXALIDACEAE-AQUATIC', 'ARALIACEAE-AQUATIC', 'TEREBINTHACEAE-AQUATIC', 'MELIACEAE-AQUATIC'],
-            ['SAXIFRAGACEAE-AQUATIC', 'LINACEAE-AQUATIC', 'CAPRIFOLIACEAE-AQUATIC', 'CARYOPHYLLACEAE-AQUATIC', 'LEGUMINOSAE-AQUATIC', 'CAMELLIACEAE-AQUATIC', 'CACTACEA-AQUATIC'],
-            ['JASMINEACEAE-AQUATIC', 'LYTHRACEAE-AQUATIC', 'ACANTHACEAE-AQUATIC', 'CRASSULACEAE-AQUATIC', 'RUBIACEAE-AQUATIC', 'HYPERICACEAE-AQUATIC', 'LORANTHACEAE-AQUATIC'],
-            ['AURANTIACEAE-AQUATIC', 'RHIZOPHORACEAE-AQUATIC', 'BORAGINACEAE-AQUATIC', 'TAMARICACEAE-AQUATIC', 'MELASTOMACEAE-AQUATIC', 'LECYTHIDACEAE-AQUATIC', 'VALERIANACEAE-AQUATIC'],
-            ['COMBRETACEAE-AQUATIC', 'APOCYNACEAE-AQUATIC', 'DIPSACEAE-AQUATIC', 'STYLIDIACEAE-AQUATIC', 'RUTACEAE-AQUATIC', 'SOLANACEAE-AQUATIC', 'PLUMBAGINACEAE-AQUATIC'],
-            ['LAMIACEAE-AQUATIC', 'BEGONIACEAE-AQUATIC', 'GROSSULARIACEAE-AQUATIC', 'GENTIANACEAE-AQUATIC', 'ERICACEAE-AQUATIC', 'CAMPANULACEAE-AQUATIC', 'POMACEAE-AQUATIC'],
-            ['BIGNONIACEAE-AQUATIC', 'AMARANTACEAE-AQUATIC', 'VACCINIACEAE-AQUATIC', 'ONAGRACEAE-AQUATIC', 'PRIMULACEAE-AQUATIC', 'SAPOTACEAE-AQUATIC', 'LOBELIACEAE-AQUATIC'],
-            ['MYRSINACEAE-AQUATIC', 'PORTULACEAE-AQUATIC', 'PLANTAGINACEAE-AQUATIC', 'ELAEAGNACEAE-AQUATIC', 'OLEACEAE-AQUATIC', 'POLEMONIACEAE-AQUATIC', 'ORCHIDACEAE-AQUATIC'],
-            ['EUPHORBIACEAE-AQUATIC', 'SCROPHULARIACEAE-AQUATIC', 'CONVOLVULACEAE-AQUATIC', 'MUSACEAE-AQUATIC', 'UTRICULARIACEAE-AQUATIC', 'UMBELLACEAE-AQUATIC', 'PROTEACEAE-AQUATIC'],
-            ['GOODENIACEAE-AQUATIC', 'THYMELACEAE-AQUATIC', 'URTICACEAE-AQUATIC', 'OROBANCHACEAE-AQUATIC', 'HYDROPHYLLACEAE-AQUATIC', 'AMARYLLIDACEAE-AQUATIC', 'CONIFERACEAE-AQUATIC'],
-            ['PHYTOLACCACEAE-AQUATIC', 'PAEONIACEAE-AQUATIC', 'IRIDACEAE-AQUATIC', 'DIOSCORACEAE-AQUATIC', 'GESNERIACEAE-AQUATIC', 'SANTALACEAE-AQUATIC', 'HYDROCHARIDACEAE-AQUATIC'],
-            ['ZINGIBERACEAE-AQUATIC', 'ALISMACEAE-AQUATIC', 'POLYGONACEAE-AQUATIC', 'NYCTAGINACEAE-AQUATIC', 'BROMELIACEAE-AQUATIC', 'SMILACEAE-AQUATIC', 'EBENACEAE-AQUATIC'],
-            ['ROSACEAE-AQUATIC', 'LILIACEAE-AQUATIC', 'JUNCACEAE-AQUATIC', 'VERBENACEAE-AQUATIC', 'HAEMODORACEAE-AQUATIC', 'COMMELINACEAE-AQUATIC', 'COLCHICACEAE-AQUATIC']
-        ]
-
-        for row, colors in enumerate(eye_colors):
-            for col, color in enumerate(colors):
-                self.make_group("aquaticeyes", (col, row), f"eyes{color}")
-                self.make_group("aquaticeyes2", (col, row), f"eyes2{color}")
-        
-        eye_colors = [
-            ['BERBERIDACEAE-ARID', 'RANUNCULACEAE-ARID', 'CAPPARIDACEAE-ARID', 'VIOLACEAE-ARID', 'FUMARIACEAE-ARID', 'PAPAVERACEAE-ARID', 'MAGNOLIACEAE-ARID'],
-            ['POLYGALACEAE-ARID', 'RESEDACEAE-ARID', 'CISTACEAE-ARID', 'NYMPHEACEAE-ARID', 'DIPTEROCARPACEAE-ARID', 'DILLENIACEAE-ARID', 'AMYGDALACEAE-ARID'],
-            ['ANONACEAE-ARID', 'MYRTACEAE-ARID', 'TILIACEAE-ARID', 'PITTOSPORACEAE-ARID', 'MALVACEAE-ARID', 'SARRACENIACEAE-ARID', 'DROSERACEAE-ARID'],
-            ['HIPPOCASTANACEAE-ARID', 'TROPAEOLACEAE-ARID', 'PASSIFLORACEAE-ARID', 'OLACACEAE-ARID', 'CRUCIACEAE-ARID', 'LOASACEAE-ARID', 'MALPIGHIACEAE-ARID'],
-            ['MESEMBRYACEAE-ARID', 'VITACEAE-ARID', 'MARCGRAVIACEAE-ARID', 'CLUSIACEAE-ARID', 'BOMBACEAE-ARID', 'SAMYDACEAE-ARID', 'BIXACEAE-ARID'],
-            ['GERANIACEAE-ARID', 'COMPOSITACEAE-ARID', 'RHAMNACEAE-ARID', 'OXALIDACEAE-ARID', 'ARALIACEAE-ARID', 'TEREBINTHACEAE-ARID', 'MELIACEAE-ARID'],
-            ['SAXIFRAGACEAE-ARID', 'LINACEAE-ARID', 'CAPRIFOLIACEAE-ARID', 'CARYOPHYLLACEAE-ARID', 'LEGUMINOSAE-ARID', 'CAMELLIACEAE-ARID', 'CACTACEA-ARID'],
-            ['JASMINEACEAE-ARID', 'LYTHRACEAE-ARID', 'ACANTHACEAE-ARID', 'CRASSULACEAE-ARID', 'RUBIACEAE-ARID', 'HYPERICACEAE-ARID', 'LORANTHACEAE-ARID'],
-            ['AURANTIACEAE-ARID', 'RHIZOPHORACEAE-ARID', 'BORAGINACEAE-ARID', 'TAMARICACEAE-ARID', 'MELASTOMACEAE-ARID', 'LECYTHIDACEAE-ARID', 'VALERIANACEAE-ARID'],
-            ['COMBRETACEAE-ARID', 'APOCYNACEAE-ARID', 'DIPSACEAE-ARID', 'STYLIDIACEAE-ARID', 'RUTACEAE-ARID', 'SOLANACEAE-ARID', 'PLUMBAGINACEAE-ARID'],
-            ['LAMIACEAE-ARID', 'BEGONIACEAE-ARID', 'GROSSULARIACEAE-ARID', 'GENTIANACEAE-ARID', 'ERICACEAE-ARID', 'CAMPANULACEAE-ARID', 'POMACEAE-ARID'],
-            ['BIGNONIACEAE-ARID', 'AMARANTACEAE-ARID', 'VACCINIACEAE-ARID', 'ONAGRACEAE-ARID', 'PRIMULACEAE-ARID', 'SAPOTACEAE-ARID', 'LOBELIACEAE-ARID'],
-            ['MYRSINACEAE-ARID', 'PORTULACEAE-ARID', 'PLANTAGINACEAE-ARID', 'ELAEAGNACEAE-ARID', 'OLEACEAE-ARID', 'POLEMONIACEAE-ARID', 'ORCHIDACEAE-ARID'],
-            ['EUPHORBIACEAE-ARID', 'SCROPHULARIACEAE-ARID', 'CONVOLVULACEAE-ARID', 'MUSACEAE-ARID', 'UTRICULARIACEAE-ARID', 'UMBELLACEAE-ARID', 'PROTEACEAE-ARID'],
-            ['GOODENIACEAE-ARID', 'THYMELACEAE-ARID', 'URTICACEAE-ARID', 'OROBANCHACEAE-ARID', 'HYDROPHYLLACEAE-ARID', 'AMARYLLIDACEAE-ARID', 'CONIFERACEAE-ARID'],
-            ['PHYTOLACCACEAE-ARID', 'PAEONIACEAE-ARID', 'IRIDACEAE-ARID', 'DIOSCORACEAE-ARID', 'GESNERIACEAE-ARID', 'SANTALACEAE-ARID', 'HYDROCHARIDACEAE-ARID'],
-            ['ZINGIBERACEAE-ARID', 'ALISMACEAE-ARID', 'POLYGONACEAE-ARID', 'NYCTAGINACEAE-ARID', 'BROMELIACEAE-ARID', 'SMILACEAE-ARID', 'EBENACEAE-ARID'],
-            ['ROSACEAE-ARID', 'LILIACEAE-ARID', 'JUNCACEAE-ARID', 'VERBENACEAE-ARID', 'HAEMODORACEAE-ARID', 'COMMELINACEAE-ARID', 'COLCHICACEAE-ARID']
-        ]
-
-        for row, colors in enumerate(eye_colors):
-            for col, color in enumerate(colors):
-                self.make_group("arideyes", (col, row), f"eyes{color}")
-                self.make_group("arideyes2", (col, row), f"eyes2{color}")
-
-        # Define white patches
-        white_patches = [
-            [
-                "FULLWHITE",
-                "ANY",
-                "TUXEDO",
-                "LITTLE",
-                "COLOURPOINT",
-                "VAN",
-                "ANYTWO",
-                "MOON",
-                "PHANTOM",
-                "POWDER",
-                "BLEACHED",
-                "SAVANNAH",
-                "FADESPOTS",
-                "PEBBLESHINE",
-            ],
-            [
-                "EXTRA",
-                "ONEEAR",
-                "BROKEN",
-                "LIGHTTUXEDO",
-                "BUZZARDFANG",
-                "RAGDOLL",
-                "LIGHTSONG",
-                "VITILIGO",
-                "BLACKSTAR",
-                "PIEBALD",
-                "CURVED",
-                "PETAL",
-                "SHIBAINU",
-                "OWL",
-            ],
-            [
-                "TIP",
-                "FANCY",
-                "FRECKLES",
-                "RINGTAIL",
-                "HALFFACE",
-                "PANTSTWO",
-                "GOATEE",
-                "VITILIGOTWO",
-                "PAWS",
-                "MITAINE",
-                "BROKENBLAZE",
-                "SCOURGE",
-                "DIVA",
-                "BEARD",
-            ],
-            [
-                "TAIL",
-                "BLAZE",
-                "PRINCE",
-                "BIB",
-                "VEE",
-                "UNDERS",
-                "HONEY",
-                "FAROFA",
-                "DAMIEN",
-                "MISTER",
-                "BELLY",
-                "TAILTIP",
-                "TOES",
-                "TOPCOVER",
-            ],
-            [
-                "APRON",
-                "CAPSADDLE",
-                "MASKMANTLE",
-                "SQUEAKS",
-                "STAR",
-                "TOESTAIL",
-                "RAVENPAW",
-                "PANTS",
-                "REVERSEPANTS",
-                "SKUNK",
-                "KARPATI",
-                "HALFWHITE",
-                "APPALOOSA",
-                "DAPPLEPAW",
-            ],
-            [
-                "HEART",
-                "LILTWO",
-                "GLASS",
-                "MOORISH",
-                "SEPIAPOINT",
-                "MINKPOINT",
-                "SEALPOINT",
-                "MAO",
-                "LUNA",
-                "CHESTSPECK",
-                "WINGS",
-                "PAINTED",
-                "HEARTTWO",
-                "WOODPECKER",
-            ],
-            [
-                "BOOTS",
-                "MISS",
-                "COW",
-                "COWTWO",
-                "BUB",
-                "BOWTIE",
-                "MUSTACHE",
-                "REVERSEHEART",
-                "SPARROW",
-                "VEST",
-                "LOVEBUG",
-                "TRIXIE",
-                "SAMMY",
-                "SPARKLE",
-            ],
-            [
-                "RIGHTEAR",
-                "LEFTEAR",
-                "ESTRELLA",
-                "SHOOTINGSTAR",
-                "EYESPOT",
-                "REVERSEEYE",
-                "FADEBELLY",
-                "FRONT",
-                "BLOSSOMSTEP",
-                "PEBBLE",
-                "TAILTWO",
-                "BUDDY",
-                "BACKSPOT",
-                "EYEBAGS",
-            ],
-            [
-                "BULLSEYE",
-                "FINN",
-                "DIGIT",
-                "KROPKA",
-                "FCTWO",
-                "FCONE",
-                "MIA",
-                "SCAR",
-                "BUSTER",
-                "SMOKEY",
-                "HAWKBLAZE",
-                "CAKE",
-                "ROSINA",
-                "PRINCESS",
-            ],
-            ["LOCKET", "BLAZEMASK", "TEARS", "DOUGIE"],
-        ]
-
-        for row, patches in enumerate(white_patches):
-            for col, patch in enumerate(patches):
-                self.make_group("whitepatches", (col, row), f"white{patch}")
-
-        # Define colors and categories
-        color_categories = [
-            ['BERBERIDACEAE', 'RANUNCULACEAE', 'CAPPARIDACEAE', 'VIOLACEAE', 'FUMARIACEAE', 'PAPAVERACEAE', 'MAGNOLIACEAE'],
-            ['POLYGALACEAE', 'RESEDACEAE', 'CISTACEAE', 'NYMPHEACEAE', 'DIPTEROCARPACEAE', 'DILLENIACEAE', 'AMYGDALACEAE'],
-            ['ANONACEAE', 'MYRTACEAE', 'TILIACEAE', 'PITTOSPORACEAE', 'MALVACEAE', 'SARRACENIACEAE', 'DROSERACEAE'],
-            ['HIPPOCASTANACEAE', 'TROPAEOLACEAE', 'PASSIFLORACEAE', 'OLACACEAE', 'CRUCIACEAE', 'LOASACEAE', 'MALPIGHIACEAE'],
-            ['MESEMBRYACEAE', 'VITACEAE', 'MARCGRAVIACEAE', 'CLUSIACEAE', 'BOMBACEAE', 'SAMYDACEAE', 'BIXACEAE'],
-            ['GERANIACEAE', 'COMPOSITACEAE', 'RHAMNACEAE', 'OXALIDACEAE', 'ARALIACEAE', 'TEREBINTHACEAE', 'MELIACEAE'],
-            ['SAXIFRAGACEAE', 'LINACEAE', 'CAPRIFOLIACEAE', 'CARYOPHYLLACEAE', 'LEGUMINOSAE', 'CAMELLIACEAE', 'CACTACEA'],
-            ['JASMINEACEAE', 'LYTHRACEAE', 'ACANTHACEAE', 'CRASSULACEAE', 'RUBIACEAE', 'HYPERICACEAE', 'LORANTHACEAE'],
-            ['AURANTIACEAE', 'RHIZOPHORACEAE', 'BORAGINACEAE', 'TAMARICACEAE', 'MELASTOMACEAE', 'LECYTHIDACEAE', 'VALERIANACEAE'],
-            ['COMBRETACEAE', 'APOCYNACEAE', 'DIPSACEAE', 'STYLIDIACEAE', 'RUTACEAE', 'SOLANACEAE', 'PLUMBAGINACEAE'],
-            ['LAMIACEAE', 'BEGONIACEAE', 'GROSSULARIACEAE', 'GENTIANACEAE', 'ERICACEAE', 'CAMPANULACEAE', 'POMACEAE'],
-            ['BIGNONIACEAE', 'AMARANTACEAE', 'VACCINIACEAE', 'ONAGRACEAE', 'PRIMULACEAE', 'SAPOTACEAE', 'LOBELIACEAE'],
-            ['MYRSINACEAE', 'PORTULACEAE', 'PLANTAGINACEAE', 'ELAEAGNACEAE', 'OLEACEAE', 'POLEMONIACEAE', 'ORCHIDACEAE'],
-            ['EUPHORBIACEAE', 'SCROPHULARIACEAE', 'CONVOLVULACEAE', 'MUSACEAE', 'UTRICULARIACEAE', 'UMBELLACEAE', 'PROTEACEAE'],
-            ['GOODENIACEAE', 'THYMELACEAE', 'URTICACEAE', 'OROBANCHACEAE', 'HYDROPHYLLACEAE', 'AMARYLLIDACEAE', 'CONIFERACEAE'],
-            ['PHYTOLACCACEAE', 'PAEONIACEAE', 'IRIDACEAE', 'DIOSCORACEAE', 'GESNERIACEAE', 'SANTALACEAE', 'HYDROCHARIDACEAE'],
-            ['ZINGIBERACEAE', 'ALISMACEAE', 'POLYGONACEAE', 'NYCTAGINACEAE', 'BROMELIACEAE', 'SMILACEAE', 'EBENACEAE'],
-            ['ROSACEAE', 'LILIACEAE', 'JUNCACEAE', 'VERBENACEAE', 'HAEMODORACEAE', 'COMMELINACEAE', 'COLCHICACEAE'],
-        ]
-
-        color_types = [
-            "singlecolours",
-            "tabbycolours",
-            "marbledcolours",
-            "rosettecolours",
-            "smokecolours",
-            "tickedcolours",
-            "speckledcolours",
-            "bengalcolours",
-            "mackerelcolours",
-            "classiccolours",
-            "sokokecolours",
-            "agouticolours",
-            "singlestripecolours",
-            "maskedcolours",
-        ]
-
-        for row, colors in enumerate(color_categories):
-            for col, color in enumerate(colors):
-                for color_type in color_types:
-                    self.make_group(color_type, (col, row), f"{color_type[:-7]}{color}")
-
-        # tortiepatchesmasks
-        tortiepatchesmasks = [
-            [
-                "ONE",
-                "TWO",
-                "THREE",
-                "FOUR",
-                "REDTAIL",
-                "DELILAH",
-                "HALF",
-                "STREAK",
-                "MASK",
-                "SMOKE",
-            ],
-            [
-                "MINIMALONE",
-                "MINIMALTWO",
-                "MINIMALTHREE",
-                "MINIMALFOUR",
-                "OREO",
-                "SWOOP",
-                "CHIMERA",
-                "CHEST",
-                "ARMTAIL",
-                "GRUMPYFACE",
-            ],
-            [
-                "MOTTLED",
-                "SIDEMASK",
-                "EYEDOT",
-                "BANDANA",
-                "PACMAN",
-                "STREAMSTRIKE",
-                "SMUDGED",
-                "DAUB",
-                "EMBER",
-                "BRIE",
-            ],
-            [
-                "ORIOLE",
-                "ROBIN",
-                "BRINDLE",
-                "PAIGE",
-                "ROSETAIL",
-                "SAFI",
-                "DAPPLENIGHT",
-                "BLANKET",
-                "BELOVED",
-                "BODY",
-            ],
-            ["SHILOH", "FRECKLED", "HEARTBEAT"],
-        ]
-
-        for row, masks in enumerate(tortiepatchesmasks):
-            for col, mask in enumerate(masks):
-                self.make_group("tortiepatchesmasks", (col, row), f"tortiemask{mask}")
-
-        # Define skin colors
-        skin_colors = [
-            ["BLACK", "RED", "PINK", "DARKBROWN", "BROWN", "LIGHTBROWN"],
-            ["DARK", "DARKGREY", "GREY", "DARKSALMON", "SALMON", "PEACH"],
-            ["DARKMARBLED", "MARBLED", "LIGHTMARBLED", "DARKBLUE", "BLUE", "LIGHTBLUE"],
-        ]
-
-        for row, colors in enumerate(skin_colors):
-            for col, color in enumerate(colors):
-                self.make_group("skin", (col, row), f"skin{color}")
-
-        self.load_scars()
         self.load_symbols()
 
-    def load_scars(self):
+    def load_sheet(self, spritesheet: str, sprite_names: list[list[str]]):
         """
-        Loads scar sprites and puts them into groups.
+        Loads sheet data and creates sprite groups.
+        :param spritesheet: name of the spritesheet
+        :param sprite_names: list containing lists of sprite names for this spritesheet, each list is a single row of the sheet
         """
-
-        # Define scars
-        scars_data = [
-            [
-                "ONE",
-                "TWO",
-                "THREE",
-                "MANLEG",
-                "BRIGHTHEART",
-                "MANTAIL",
-                "BRIDGE",
-                "RIGHTBLIND",
-                "LEFTBLIND",
-                "BOTHBLIND",
-                "BURNPAWS",
-                "BURNTAIL",
-            ],
-            [
-                "BURNBELLY",
-                "BEAKCHEEK",
-                "BEAKLOWER",
-                "BURNRUMP",
-                "CATBITE",
-                "RATBITE",
-                "FROSTFACE",
-                "FROSTTAIL",
-                "FROSTMITT",
-                "FROSTSOCK",
-                "QUILLCHUNK",
-                "QUILLSCRATCH",
-            ],
-            [
-                "TAILSCAR",
-                "SNOUT",
-                "CHEEK",
-                "SIDE",
-                "THROAT",
-                "TAILBASE",
-                "BELLY",
-                "TOETRAP",
-                "SNAKE",
-                "LEGBITE",
-                "NECKBITE",
-                "FACE",
-            ],
-            [
-                "HINDLEG",
-                "BACK",
-                "QUILLSIDE",
-                "SCRATCHSIDE",
-                "TOE",
-                "BEAKSIDE",
-                "CATBITETWO",
-                "SNAKETWO",
-                "FOUR",
-            ],
-        ]
-
-        # define missing parts
-        missing_parts_data = [
-            [
-                "LEFTEAR",
-                "RIGHTEAR",
-                "NOTAIL",
-                "NOLEFTEAR",
-                "NORIGHTEAR",
-                "NOEAR",
-                "HALFTAIL",
-                "NOPAW",
-            ]
-        ]
-
-        # scars
-        for row, scars in enumerate(scars_data):
-            for col, scar in enumerate(scars):
-                self.make_group("scars", (col, row), f"scars{scar}")
-
-        # missing parts
-        for row, missing_parts in enumerate(missing_parts_data):
-            for col, missing_part in enumerate(missing_parts):
-                self.make_group("missingscars", (col, row), f"scars{missing_part}")
-
-        # accessories
-        # to my beloved modders, im very sorry for reordering everything <333 -clay
-        medcatherbs_data = [
-            [
-                "MAPLE LEAF",
-                "HOLLY",
-                "BLUE BERRIES",
-                "FORGET ME NOTS",
-                "RYE STALK",
-                "CATTAIL",
-                "POPPY",
-                "ORANGE POPPY",
-                "CYAN POPPY",
-                "WHITE POPPY",
-                "PINK POPPY",
-            ],
-            [
-                "BLUEBELLS",
-                "LILY OF THE VALLEY",
-                "SNAPDRAGON",
-                "HERBS",
-                "PETALS",
-                "NETTLE",
-                "HEATHER",
-                "GORSE",
-                "JUNIPER",
-                "RASPBERRY",
-                "LAVENDER",
-            ],
-            [
-                "OAK LEAVES",
-                "CATMINT",
-                "MAPLE SEED",
-                "LAUREL",
-                "BULB WHITE",
-                "BULB YELLOW",
-                "BULB ORANGE",
-                "BULB PINK",
-                "BULB BLUE",
-                "CLOVER",
-                "DAISY",
-            ],
-            [
-                "WISTERIA",
-                "ROSE MALLOW",
-                "PICKLEWEED",
-                "GOLDEN CREEPING JENNY",
-                "DESERT WILLOW",
-                "CACTUS FLOWER",
-                "PRAIRIE FIRE",
-                "VERBENA EAR",
-                "VERBENA PELT",
-            ],
-        ]
-        dryherbs_data = [["DRY HERBS", "DRY CATMINT", "DRY NETTLES", "DRY LAURELS"]]
-        wild_data = [
-            [
-                "RED FEATHERS",
-                "BLUE FEATHERS",
-                "JAY FEATHERS",
-                "GULL FEATHERS",
-                "SPARROW FEATHERS",
-                "MOTH WINGS",
-                "ROSY MOTH WINGS",
-                "MORPHO BUTTERFLY",
-                "MONARCH BUTTERFLY",
-                "CICADA WINGS",
-                "BLACK CICADA",
-            ],
-            [
-                "ROAD RUNNER FEATHER",
-            ],
-        ]
-
-        collars_data = [
-            ["CRIMSON", "BLUE", "YELLOW", "CYAN", "RED", "LIME"],
-            ["GREEN", "RAINBOW", "BLACK", "SPIKES", "WHITE"],
-            ["PINK", "PURPLE", "MULTI", "INDIGO"],
-        ]
-
-        bellcollars_data = [
-            [
-                "CRIMSONBELL",
-                "BLUEBELL",
-                "YELLOWBELL",
-                "CYANBELL",
-                "REDBELL",
-                "LIMEBELL",
-            ],
-            ["GREENBELL", "RAINBOWBELL", "BLACKBELL", "SPIKESBELL", "WHITEBELL"],
-            ["PINKBELL", "PURPLEBELL", "MULTIBELL", "INDIGOBELL"],
-        ]
-
-        bowcollars_data = [
-            ["CRIMSONBOW", "BLUEBOW", "YELLOWBOW", "CYANBOW", "REDBOW", "LIMEBOW"],
-            ["GREENBOW", "RAINBOWBOW", "BLACKBOW", "SPIKESBOW", "WHITEBOW"],
-            ["PINKBOW", "PURPLEBOW", "MULTIBOW", "INDIGOBOW"],
-        ]
-
-        nyloncollars_data = [
-            [
-                "CRIMSONNYLON",
-                "BLUENYLON",
-                "YELLOWNYLON",
-                "CYANNYLON",
-                "REDNYLON",
-                "LIMENYLON",
-            ],
-            ["GREENNYLON", "RAINBOWNYLON", "BLACKNYLON", "SPIKESNYLON", "WHITENYLON"],
-            ["PINKNYLON", "PURPLENYLON", "MULTINYLON", "INDIGONYLON"],
-        ]
-
-        # medcatherbs
-        for row, herbs in enumerate(medcatherbs_data):
-            for col, herb in enumerate(herbs):
-                self.make_group("medcatherbs", (col, row), f"acc_herbs{herb}")
-        # dryherbs
-        for row, dry in enumerate(dryherbs_data):
-            for col, dryherbs in enumerate(dry):
-                self.make_group("medcatherbs", (col, 4), f"acc_herbs{dryherbs}")
-        # wild
-        for row, wilds in enumerate(wild_data):
-            for col, wild in enumerate(wilds):
-                self.make_group("wild", (col, row), f"acc_wild{wild}")
-
-        # collars
-        for row, collars in enumerate(collars_data):
-            for col, collar in enumerate(collars):
-                self.make_group("collars", (col, row), f"collars{collar}")
-
-        # bellcollars
-        for row, bellcollars in enumerate(bellcollars_data):
-            for col, bellcollar in enumerate(bellcollars):
-                self.make_group("bellcollars", (col, row), f"collars{bellcollar}")
-
-        # bowcollars
-        for row, bowcollars in enumerate(bowcollars_data):
-            for col, bowcollar in enumerate(bowcollars):
-                self.make_group("bowcollars", (col, row), f"collars{bowcollar}")
-
-        # nyloncollars
-        for row, nyloncollars in enumerate(nyloncollars_data):
-            for col, nyloncollar in enumerate(nyloncollars):
-                self.make_group("nyloncollars", (col, row), f"collars{nyloncollar}")
+        for row, sprite_names in enumerate(sprite_names):
+            for col, sprite in enumerate(sprite_names):
+                self.make_group(
+                    spritesheet=spritesheet,
+                    pos=(col, row),
+                    name=f"{spritesheet}{sprite}",
+                )
 
     def load_symbols(self):
         """
